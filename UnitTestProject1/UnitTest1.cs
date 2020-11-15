@@ -1,6 +1,7 @@
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Airport_Test
+namespace UnitTestProject1
 {
     [TestClass]
     public class UnitTest1
@@ -8,7 +9,7 @@ namespace Airport_Test
         [TestMethod]
         public void TestMethod1()
         {
-            Assert.IsTrue(true);
+            Assert.AreEqual(4, 3);
         }
     }
 }

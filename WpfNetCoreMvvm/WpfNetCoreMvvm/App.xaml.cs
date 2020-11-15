@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ChatClient.ViewModels;
+using ChatClient.Views;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -44,9 +46,13 @@ namespace WpfNetCoreMvvm
 
             // Register all ViewModels.
             services.AddSingleton<MainViewModel>();
+            services.AddSingleton<HomeViewModel>();
+
 
             // Register all the Windows of the applications.
             services.AddTransient<MainWindow>();
+            services.AddTransient<HomeView>();
+
         }
 
         protected override async void OnStartup(StartupEventArgs e)

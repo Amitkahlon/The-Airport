@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight;
+﻿using ChatClient.ViewModels;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
@@ -14,14 +15,20 @@ namespace WpfNetCoreMvvm.ViewModels
 
         private readonly IConnectionService service;
 
-        private ICommand changePageCommand;
-        private List<ViewModelBase> pageViewModels;
-        private ViewModelBase currentPage;
+        private ViewModelBase _selectedViewModel;
+        public ViewModelBase SelectedViewModel
+        {
+            get { return _selectedViewModel; }
+            set { _selectedViewModel = value; }
+        }
+
 
         public MainViewModel(IOptions<AppSettings> options, IConnectionService service)
         {
             settings = options.Value;
             this.service = service;
+
+            SelectedViewModel = new HomeViewModel();
 
             // add avaliable pages/user control
 

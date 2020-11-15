@@ -13,7 +13,19 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
-    <Grid Margin="0,0,193.333,50.667">
-        
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <UserControl />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Width="125" Margin="10">Home</Button>
+            <Button Width="125" Margin="10">Database</Button>
+            <Button Width="125" Margin="10">Airport Visual</Button>
+        </StackPanel>
     </Grid>
 </Window>

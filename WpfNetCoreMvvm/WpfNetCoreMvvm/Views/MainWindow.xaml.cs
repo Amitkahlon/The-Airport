@@ -7,6 +7,7 @@ namespace WpfNetCoreMvvm.Views
         public MainWindow()
         {
             InitializeComponent();
+
         }
     }
 }

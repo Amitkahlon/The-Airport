@@ -7,13 +7,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport Server", "Airport S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chat Client", "WpfNetCoreMvvm\WpfNetCoreMvvm\Chat Client.csproj", "{ACCB863D-6C3F-4C97-A1F4-74DFE76D37A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airport Logic", "Airport Logic\Airport Logic.csproj", "{18E06278-8096-4E99-9359-14942477E20C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport Logic", "Airport Logic\Airport Logic.csproj", "{18E06278-8096-4E99-9359-14942477E20C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airport Data Access", "Data Access Layer\Airport Data Access.csproj", "{5CFE448D-70DF-4CA3-BC6B-E8FC84F073A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport Data Access", "Data Access Layer\Airport Data Access.csproj", "{5CFE448D-70DF-4CA3-BC6B-E8FC84F073A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airport Test", "Airport Test\Airport Test.csproj", "{CF1575CE-79CA-4A00-863A-3E4FB8A40C2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport Common", "Airport Common\Airport Common.csproj", "{8B97EB61-5A4C-428E-8B5F-AF763479C790}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airport Common", "Airport Common\Airport Common.csproj", "{8B97EB61-5A4C-428E-8B5F-AF763479C790}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BAD7E019-1BAF-431C-AEC0-F8BA7026084B}"
+	ProjectSection(SolutionItems) = preProject
+		Notes.txt = Notes.txt
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airport Test", "Airport Test\Airport Test.csproj", "{CE079044-C188-4DF7-8256-A299BBB0B53B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +42,14 @@ Global
 		{5CFE448D-70DF-4CA3-BC6B-E8FC84F073A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CFE448D-70DF-4CA3-BC6B-E8FC84F073A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CFE448D-70DF-4CA3-BC6B-E8FC84F073A9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CF1575CE-79CA-4A00-863A-3E4FB8A40C2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CF1575CE-79CA-4A00-863A-3E4FB8A40C2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CF1575CE-79CA-4A00-863A-3E4FB8A40C2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CF1575CE-79CA-4A00-863A-3E4FB8A40C2F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B97EB61-5A4C-428E-8B5F-AF763479C790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8B97EB61-5A4C-428E-8B5F-AF763479C790}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8B97EB61-5A4C-428E-8B5F-AF763479C790}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B97EB61-5A4C-428E-8B5F-AF763479C790}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE079044-C188-4DF7-8256-A299BBB0B53B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE079044-C188-4DF7-8256-A299BBB0B53B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE079044-C188-4DF7-8256-A299BBB0B53B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE079044-C188-4DF7-8256-A299BBB0B53B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

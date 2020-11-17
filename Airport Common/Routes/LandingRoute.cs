@@ -5,6 +5,8 @@ namespace Airport_Common.Routes
 {
     public class LandingRoute : IRoute
     {
+        public string Name => "Landing";
+
         public IEnumerable<int> GetNextAvailableRoute(int stationNumber)
         {
             switch (stationNumber)

@@ -18,9 +18,9 @@ namespace Airport_Common.Models
 
         //logic
 
-        public TimeSpan WaitingTime { get; internal set; }
+        public TimeSpan WaitingTime { get; set; }
 
-        internal void AddStation(Station station)
+        public void AddStation(Station station)
         {
             if (!ConnectedStations.Contains(station))
             {

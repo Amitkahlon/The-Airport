@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Airport Logic\Airport Logic.csproj" />
+    <ProjectReference Include="..\Airport Simulator\Airport Simulator.csproj" />
   </ItemGroup>
 
 </Project>

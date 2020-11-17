@@ -9,10 +9,16 @@ namespace Airport_Common.Interfaces
     {
         /// <summary>
         /// Returns a IEnumarable of numbers which represent the next avaliable station
+        /// if 0 is returned, it means you reached the end of the route
         /// </summary>
         /// <param name="stationNumber">The station we are checking whats the next avaliable stations</param>
-        /// <returns>List of next avaliable station numbers, case 0 == no next station</returns>
+        /// <returns>List of next avaliable station numbers, 0 == end of route</returns>
         IEnumerable<int> GetNextAvailableRoute(int stationNumber);
+
+        /// <summary>
+        /// Name of the route
+        /// </summary>
+        string Name { get; }
 
     }
 }

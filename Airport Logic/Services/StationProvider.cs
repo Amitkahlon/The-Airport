@@ -3,31 +3,34 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using Airport_Common.Models;
+using Airport_Logic.Interfaces;
 
 namespace Airport_Logic.Services
 {
-    public class StationService
+    internal class StationProvider : IStationProvider
     {
-        //private static StationService singletonService;
-        private List<LogicStation> stations = new List<LogicStation>();
+        private readonly List<LogicStation> stations = new List<LogicStation>();
+        private int stationCount = 0;
 
-        public void CreateStation(int stationNum, string stationName, TimeSpan timeSpan)
+        public void CreateStation(string stationName, TimeSpan timeSpan)
         {
-            if(stationNum == 0)
+            stationCount++;
+            if (stationCount == 0)
             {
                 throw new ArgumentException("Station number cannot be 0");
             }
 
-            if (stations.Any(s => s.StationNumber == stationNum))
+            if (stations.Any(s => s.StationNumber == stationCount))
             {
                 throw new ArgumentException("Station number must be unique");
             }
 
             stations.Add(new LogicStation()
             {
-                StationNumber = stationNum,
-                StationName = stationName,
-                WaitingTime = timeSpan,
+                    StationNumber = stationCount,
+                    StationName = stationName,
+                    WaitingTime = timeSpan,
             });
         }
         public LogicStation GetStation(int stationNum)
@@ -44,20 +47,6 @@ namespace Airport_Logic.Services
             {
                 throw new ArgumentException("Station does not exist");
             }
-        }
-
-        //public static StationService GetService()
-        //{
-        //    if (singletonService == null)
-        //    {
-        //        singletonService = new StationService();
-        //    }
-        //    return singletonService;
-        //}
-
-        public StationService()
-        {
-
         }
     }
 }

@@ -19,7 +19,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <ContentControl Content="{Binding Frame}"/> 
+        <ContentControl Content="{Binding Control}"/> 
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Width="125" Margin="10" Command="{Binding DatabaseNavCommand}">Home</Button>

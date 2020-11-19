@@ -1,17 +1,24 @@
 ﻿using Airport_Common.Interfaces;
 using Airport_Common.Models;
 using Airport_Logic.Logic_Models;
+using Airport_Test.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace Airport_Test.Tests
+namespace Airport_Test
 {
     [TestClass]
     public class LogicStationTests
     {
+        private TestStationService testStationService;
+        public LogicStationTests()
+        {
+            testStationService = TestStationService.GetInstance();
+        }
+
         [TestMethod]
         public void InitializeLogicStation()
         {
@@ -50,7 +57,7 @@ namespace Airport_Test.Tests
         }
 
         [TestMethod]
-        public void EnterStationTest()
+        public void EnterStation_1Plane()
         {
             //Arrange
             var station1 = new LogicStation();
@@ -69,6 +76,51 @@ namespace Airport_Test.Tests
 
             Thread.Sleep(TimeSpan.FromSeconds(2.01));
             Assert.IsTrue(station1.CurrentPlane == null);
+        }
+
+        [TestMethod]
+        public void EnterStation_2Planes()
+        {
+            //Arrange
+
+            var s1 = new LogicStation()
+            {
+                WaitingTime = TimeSpan.FromSeconds(4),
+                StationNumber = 1
+            };
+
+            var plane1 = new Plane()
+            {
+                PlaneRoute = new StationTest1(),
+                FlightNumber = "0"
+            };
+
+            var plane2 = new Plane()
+            {
+                PlaneRoute = new StationTest1(),
+                FlightNumber = "1"
+            };
+
+            //Act
+
+            s1.EnterStation(plane1);
+            Thread.Sleep(50);
+
+            s1.EnterStation(plane2);
+            Thread.Sleep(50);
+
+            //Assert
+
+
+            testStationService.IsCurrentPlane(s1, "0");
+            testStationService.IsExistInWaitingLine(s1, "1");
+
+            Thread.Sleep(TimeSpan.FromSeconds(4.1));
+            testStationService.IsCurrentPlane(s1, "1");
+            testStationService.IsWaitingLineEmpty(s1);
+
+            Thread.Sleep(TimeSpan.FromSeconds(4.1));
+            Assert.IsFalse(testStationService.HasCurrentPlane(s1));
         }
 
         public class StationTest1 : IRoute

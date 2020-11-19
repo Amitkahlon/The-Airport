@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              DataContext="{Binding Source={StaticResource Locator}, Path=HomeViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid Background="Red">
         <TextBlock>Home</TextBlock>
     </Grid>
 </UserControl>

@@ -60,19 +60,24 @@ namespace Airport_Logic
                     throw new ArgumentException("routeName cannot be null and must be unique");
                 }
 
-                int stationNum = 0; //entry point
+                int stationNum = 0; //0 == entry point
                 bool isItarates = true;
                 while (isItarates)
                 {
                     IEnumerable<int> avaliableRoutenNums = route.GetNextAvailableRoute(stationNum);
 
+                    //if there is no such station in the route, stop the loop.
                     if (avaliableRoutenNums.Any(stationNums => stationNums == -1))
                     {
                         isItarates = false;
                     }
+                    //if the IEnumbrable is empty, it means the station does not participate in the route
+                    //and won't be manipulate by the builder
                     else if (avaliableRoutenNums.Any())
                     {
                         LogicStation currentStation = null;
+
+                        //if not the entry point, get the station
                         if (stationNum != 0)
                         {
                             currentStation = stationService.GetStation(stationNum);
@@ -80,6 +85,7 @@ namespace Airport_Logic
 
                         foreach (var stationId in avaliableRoutenNums)
                         {
+                            //if it is an exist point, dont add any stations and break.
                             if (stationId == 0)
                             {
                                 break;
@@ -87,16 +93,19 @@ namespace Airport_Logic
                             else
                             {
                                 var stationToAdd = stationService.GetStation(stationId);
-                                if (stationNum == 0) //Entry Point
+                                //if in the entry point, add the station to the entryManager.
+                                if (stationNum == 0) 
                                 {
                                     entryManager.AddStationToEntry(route.Name, stationToAdd);
                                 }
+                                //else add the station to the station connections
                                 else
                                 {
                                     currentStation.AddStation(stationToAdd);
                                 }
                             }
                         }
+                        //go to the next station
                         stationNum++;
                     }
                 }

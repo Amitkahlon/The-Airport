@@ -51,7 +51,7 @@ namespace Airport_Test.Mock
             id++;
         }
 
-        public void PushPlane()
+        public void PushPlane(IRoute route)
         {
             pushPlane.PushPlane(new Plane()
             {
@@ -59,7 +59,7 @@ namespace Airport_Test.Mock
                 Color = Color.White,
                 Country = "israel",
                 PassangersCount = 100,
-                PlaneRoute = new LandingRoute(),
+                PlaneRoute = route,
                 FlightNumber = id.ToString()
             });
             id++;
@@ -73,6 +73,11 @@ namespace Airport_Test.Mock
         public void StopTimer()
         {
             timer.Stop();
+        }
+
+        public void PushPlane()
+        {
+            throw new NotImplementedException();
         }
     }
 }

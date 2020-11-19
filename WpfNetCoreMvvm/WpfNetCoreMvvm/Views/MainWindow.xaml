@@ -19,11 +19,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-
-        <UserControl />
+        <ContentControl Content="{Binding Frame}"/> 
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Width="125" Margin="10">Home</Button>
+            <Button Width="125" Margin="10" Command="{Binding DatabaseNavCommand}">Home</Button>
             <Button Width="125" Margin="10">Database</Button>
             <Button Width="125" Margin="10">Airport Visual</Button>
         </StackPanel>

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Airport_Common_Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Airport_Common.Models
 {
-    public class Station
+    public class Station : ICurrentPlane
     {
         public int StationNumber { get; set; }
         public string StationName { get; set; }

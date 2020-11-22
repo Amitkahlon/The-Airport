@@ -47,12 +47,16 @@ namespace WpfNetCoreMvvm
             // Register all ViewModels.
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<HomeViewModel>();
+            services.AddSingleton<DatabaseViewModel>();
+            services.AddSingleton<VisualAirportViewModel>();
+
 
 
             // Register all the Windows of the applications.
             services.AddTransient<MainWindow>();
             services.AddTransient<HomeView>();
-
+            services.AddTransient<DatabaseView>();
+            services.AddTransient<VisualAirportView>();
         }
 
         protected override async void OnStartup(StartupEventArgs e)

@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 
 namespace Airport_Logic.Logic_Models
 {
-    internal interface IWaitingLine
+    public interface IWaitingLine
     {
         ConcurrentQueue<Plane> WaitingLine { get; }
     }

@@ -21,11 +21,19 @@ namespace Airport_Logic.Logic_Models
             ChangeInStateEvent += PushToWait;
         }
 
+        private bool IsWaitinglineEmpty
+        {
+            get
+            {
+                return WaitingLine.IsEmpty;
+            }
+        }
+
         private void PushToWait()
         {
             Task.Run(() =>
             {
-                if (!WaitingLine.IsEmpty && !isStationOccupied)
+                if (!IsWaitinglineEmpty && !isStationOccupied)
                 {
                     WaitingLine.TryDequeue(out Plane plane);
 
@@ -36,14 +44,25 @@ namespace Airport_Logic.Logic_Models
 
         public void EnterStation(Plane plane)
         {
+            if (IsWaitinglineEmpty && !isStationOccupied)
+            {
+                Task.Run(() =>
+                {
+                    Wait(plane);
+                });
+                ChangeInStateEvent?.Invoke();
+            }
+            else
+            {
                 WaitingLine.Enqueue(plane);
                 ChangeInStateEvent?.Invoke();
+            }
         }
 
         private void Wait(Plane plane)
         {
             isStationOccupied = true;
-            lock (waitingLineLock)
+            lock (waitingLineLock) 
             {
                 base.CurrentPlane = plane;
                 Thread.Sleep(base.WaitingTime);
@@ -72,7 +91,7 @@ namespace Airport_Logic.Logic_Models
             {
                 throw new Exception("Could not be empty, if we reach the end we receive -1");
             }
-            else if (nextStationNumbers.Any(staionNum => staionNum == -1)) //if it reached the end
+            else if (nextStationNumbers.Any(staionNum => staionNum == 0)) //if it reached the end
             {
                 return null;
             }
@@ -83,7 +102,7 @@ namespace Airport_Logic.Logic_Models
             }
         }
 
-        
+
         private List<LogicStation> GetStations(IEnumerable<int> stationNumbers)
         {
             List<LogicStation> NextAvaliableStations = new List<LogicStation>();

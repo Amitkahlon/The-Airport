@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Airport_Common.Interfaces;
+using System;
 
 namespace Airport_Simulator
 {
@@ -16,6 +17,10 @@ namespace Airport_Simulator
         void ConfigureTimer(TimeSpan intervalTime);
         /// <summary>
         /// Pushes a plane into the airport
+        /// </summary>
+        void PushPlane(IRoute route);
+        /// <summary>
+        /// Pushes a plane into the airport with a random route.
         /// </summary>
         void PushPlane();
         /// <summary>

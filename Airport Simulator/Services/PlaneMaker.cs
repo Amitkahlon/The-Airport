@@ -63,7 +63,7 @@ namespace Airport_Simulator
             var planeType = planeTypes[random.Next(0, planeTypes.Length)];
             var county = countries[random.Next(0, countries.Length)];
             var color = colors[random.Next(0, colors.Length)];
-            var route = routes[random.Next(0, routes.Length)];
+            var planeRoute = routes[random.Next(0, routes.Length)];
             var participantes = random.Next(0, 200);
 
             Plane newPlane = new Plane()
@@ -71,7 +71,30 @@ namespace Airport_Simulator
                 AirplaneType = planeType,
                 Country = county,
                 Color = color,
-                PlaneRoute = route,
+                PlaneRoute = planeRoute,
+                FlightNumber = "Test 775",
+                PassangersCount = participantes
+            };
+
+            airPort.PushPlane(newPlane);
+        }
+
+        public void PushPlane(IRoute route)
+        {
+            Random random = new Random();
+
+            var planeType = planeTypes[random.Next(0, planeTypes.Length)];
+            var county = countries[random.Next(0, countries.Length)];
+            var color = colors[random.Next(0, colors.Length)];
+            var planeRoute = route;
+            var participantes = random.Next(0, 200);
+
+            Plane newPlane = new Plane()
+            {
+                AirplaneType = planeType,
+                Country = county,
+                Color = color,
+                PlaneRoute = planeRoute,
                 FlightNumber = "Test 775",
                 PassangersCount = participantes
             };

@@ -11,12 +11,20 @@ using System.Threading.Tasks;
 using System.Threading;
 using Airport_Common.Models;
 using Airport_Simulator;
+using Airport_Test.TestRoute;
+using Airport_Test.Services;
 
 namespace Airport_Test
 {
     [TestClass]
     public class AirportTests
     {
+        private readonly TestStationService StationService;
+        public AirportTests()
+        {
+            StationService = TestStationService.GetInstance();
+        }
+
         [TestMethod]
         public void InitializeAndConfigure_LandingRoute_Successfull()
         {
@@ -105,32 +113,31 @@ namespace Airport_Test
 
             IPlaneMaker MockSimulator = new PlaneMakerMock(airport);
 
-
-            var station8 = airport.EntryManager.GetEntryStations("Landing").First();
-            var station7 = station8.ConnectedStations.First();
-            var station4 = station7.ConnectedStations.First();
-            var station2 = station4.ConnectedStations.First();
+            var station8 = airport.EntryManager.GetEntryStation("Landing", 8);
+            var station7 = station8.GetLogicStationByNumber(7);
+            var station4 = station7.GetLogicStationByNumber(4);
+            var station2 = station4.GetLogicStationByNumber(2);
 
             //Act 
-            MockSimulator.PushPlane();
+            MockSimulator.PushPlane(new LandingRoute());
 
-            Thread.Sleep(100);
-            Assert.IsTrue(station8.CurrentPlane.FlightNumber == "0"); //entry point
+            Thread.Sleep(50);
+            Assert.IsTrue(StationService.IsCurrentPlane(station8, "0"));
 
-            Thread.Sleep(15005); // wait 15 seconds
-            Assert.IsTrue(station8.CurrentPlane == null);
-            Assert.IsTrue(station7.CurrentPlane.FlightNumber == "0");
+            Thread.Sleep(TimeSpan.FromSeconds(15.05)); // wait 15 seconds
+            Assert.IsFalse(StationService.HasCurrentPlane(station8));
+            Assert.IsTrue(StationService.IsCurrentPlane(station7, "0"));
 
-            Thread.Sleep(20005); // Wait 20 seconds
-            Assert.IsTrue(station7.CurrentPlane == null);
-            Assert.IsTrue(station4.CurrentPlane.FlightNumber == "0");
+            Thread.Sleep(TimeSpan.FromSeconds(20.05)); // Wait 20 seconds
+            Assert.IsFalse(StationService.HasCurrentPlane(station7));
+            Assert.IsTrue(StationService.IsCurrentPlane(station4, "0"));
 
-            Thread.Sleep(5005); // Wait 5 seconds
-            Assert.IsTrue(station4.CurrentPlane == null);
-            Assert.IsTrue(station2.CurrentPlane.FlightNumber == "0");
+            Thread.Sleep(TimeSpan.FromSeconds(5.05)); // Wait 5 seconds
+            Assert.IsFalse(StationService.HasCurrentPlane(station4));
+            Assert.IsTrue(StationService.IsCurrentPlane(station2, "0"));
 
-            Thread.Sleep(10005); // Wait 10 seconds
-            Assert.IsTrue(station2.CurrentPlane == null);
+            Thread.Sleep(TimeSpan.FromSeconds(10.05)); // Wait 10 seconds
+            Assert.IsFalse(StationService.HasCurrentPlane(station2));
         }
 
         [TestMethod]
@@ -151,31 +158,31 @@ namespace Airport_Test
             var station2 = station4.GetLogicStationByNumber(2);
 
 
-
             //Act 
-            MockSimulator.PushPlane();
+            MockSimulator.PushPlane(new LandingRoute());
 
             Thread.Sleep(100);
-            Assert.IsTrue(station8.CurrentPlane.FlightNumber == "0"); // station 1
+            Assert.IsTrue(StationService.IsCurrentPlane(station8, "0"));
 
             Thread.Sleep(15005); // wait 15 seconds
-            Assert.IsTrue(station8.CurrentPlane == null);
-            Assert.IsTrue(station7.CurrentPlane.FlightNumber == "0"); // station 7
+            Assert.IsFalse(StationService.HasCurrentPlane(station8));
+            Assert.IsTrue(StationService.IsCurrentPlane(station7, "0"));
 
             Thread.Sleep(20005); // Wait 20 seconds
-            Assert.IsTrue(station7.CurrentPlane == null);
-            Assert.IsTrue(station4.CurrentPlane.FlightNumber == "0"); // station 4
+            Assert.IsFalse(StationService.HasCurrentPlane(station7));
+            Assert.IsTrue(StationService.IsCurrentPlane(station4, "0"));
 
             Thread.Sleep(5005); // Wait 5 seconds
-            Assert.IsTrue(station4.CurrentPlane == null);
-            Assert.IsTrue(station2.CurrentPlane.FlightNumber == "0"); // station 2
+            Assert.IsFalse(StationService.HasCurrentPlane(station4));
+            Assert.IsTrue(StationService.IsCurrentPlane(station2, "0"));
 
             Thread.Sleep(5000); // Wait 5 seconds **wrong
-            Assert.IsFalse(station2.CurrentPlane == null);
+            Assert.IsTrue(StationService.HasCurrentPlane(station2));
         }
 
         [TestMethod]
         public void PushPlane_DefualtAirport_3Planes_3Layers()
+
         {
             //Arrange
             var airport = new Airport(builder =>
@@ -191,24 +198,25 @@ namespace Airport_Test
             var station6 = station8.GetLogicStationByNumber(6);
             var station4 = station7.GetLogicStationByNumber(4);
 
+            var landingRoute = new LandingRoute();
 
             //Act 
-            MockSimulator.PushPlane();
+            MockSimulator.PushPlane(landingRoute);
 
-            Thread.Sleep(100);
+            Thread.Sleep(50);
 
-            MockSimulator.PushPlane();
+            MockSimulator.PushPlane(landingRoute);
 
-            Thread.Sleep(100);
+            Thread.Sleep(50);
 
-            MockSimulator.PushPlane();
+            MockSimulator.PushPlane(landingRoute);
 
-            Thread.Sleep(100);
+            Thread.Sleep(50);
 
 
             void FirstStage()
             {
-                Assert.IsTrue(station8.CurrentPlane.FlightNumber == "0");
+                Assert.IsTrue(StationService.IsCurrentPlane(station8, "0"));
                 int id = 1;
                 foreach (var plane in station8.WaitingLine)
                 {
@@ -218,33 +226,112 @@ namespace Airport_Test
             }
             FirstStage();
 
-            Thread.Sleep(TimeSpan.FromSeconds(15.3));
+            Thread.Sleep(TimeSpan.FromSeconds(15.15));
 
             void SecondStage()
             {
-                Assert.IsTrue(station8.CurrentPlane.FlightNumber == "1");
+                Assert.IsTrue(StationService.IsCurrentPlane(station8, "1"));
 
                 station8.WaitingLine.TryPeek(out Plane waitngPlane8);
                 Assert.IsTrue(waitngPlane8.FlightNumber == "2");
-
-                Assert.IsTrue(station7.CurrentPlane.FlightNumber == "0");
+                Assert.IsTrue(StationService.IsCurrentPlane(station7, "0"));
             }
             SecondStage();
 
-            Thread.Sleep(TimeSpan.FromSeconds(20.1));
+            Thread.Sleep(TimeSpan.FromSeconds(20.15));
 
             void ThirdStage()
             {
-                Assert.IsTrue(station8.CurrentPlane.FlightNumber == "2");
-                Assert.IsTrue(station8.WaitingLine.IsEmpty);
+                Assert.IsTrue(StationService.IsCurrentPlane(station8, "2"));
+                Assert.IsTrue(StationService.IsWaitingLineEmpty(station8));
 
-                Assert.IsTrue(station6.CurrentPlane.FlightNumber == "1"); //station 6 actually
-                Assert.IsTrue(station6.WaitingLine.IsEmpty);
+                Assert.IsTrue(StationService.IsCurrentPlane(station6, "1"));
+                Assert.IsTrue(StationService.IsWaitingLineEmpty(station6));
 
-                Assert.IsTrue(station4.CurrentPlane.FlightNumber == "0");
-                Assert.IsTrue(station4.WaitingLine.IsEmpty);
+                Assert.IsTrue(StationService.IsCurrentPlane(station4, "0"));
+                Assert.IsTrue(StationService.IsWaitingLineEmpty(station4));
             }
             ThirdStage();
+        }
+
+        [TestMethod]
+        public void PushPlane_3StationAirport_1Plane()
+        {
+            //arrange
+            var testRoute3Stations = new TestRoute3Stations();
+
+            var airport = new Airport(builder =>
+            {
+                builder.AddStation("station1", TimeSpan.FromSeconds(1));
+                builder.AddStation("station2", TimeSpan.FromSeconds(1));
+                builder.AddStation("station3", TimeSpan.FromSeconds(1));
+
+                builder.AddRoute(testRoute3Stations);
+            });
+
+            var planeMaker = new PlaneMakerMock(airport);
+
+            //act 
+            planeMaker.PushPlane(testRoute3Stations);
+
+            Thread.Sleep(50);
+
+            //assert
+            var firstStation = airport.EntryManager.GetEntryStation(testRoute3Stations.Name, 1);
+            Assert.IsTrue(StationService.IsCurrentPlane(firstStation, "0"));
+            Thread.Sleep(TimeSpan.FromSeconds(1.05));
+
+            var secondStation = firstStation.GetLogicStationByNumber(2);
+            Assert.IsTrue(StationService.IsCurrentPlane(secondStation, "0"));
+            Assert.IsFalse(StationService.HasCurrentPlane(firstStation));
+            Thread.Sleep(TimeSpan.FromSeconds(1.05));
+
+            var thirdStation = secondStation.GetLogicStationByNumber(3);
+            Assert.IsTrue(StationService.IsCurrentPlane(thirdStation, "0"));
+            Assert.IsFalse(StationService.HasCurrentPlane(secondStation));
+            Thread.Sleep(TimeSpan.FromSeconds(1.05));
+
+            Assert.IsFalse(StationService.HasCurrentPlane(thirdStation));
+        }
+
+        [TestMethod]
+        public void PushPlane_3StationAirport_1Plane_DifferentTimes()
+        {
+            //arrange
+            var testRoute3Stations = new TestRoute3Stations();
+
+            var airport = new Airport(builder =>
+            {
+                builder.AddStation("station1", TimeSpan.FromSeconds(1));
+                builder.AddStation("station2", TimeSpan.FromSeconds(3));
+                builder.AddStation("station3", TimeSpan.FromSeconds(2));
+
+                builder.AddRoute(testRoute3Stations);
+            });
+
+            var planeMaker = new PlaneMakerMock(airport);
+
+            //act 
+            planeMaker.PushPlane(testRoute3Stations);
+
+            Thread.Sleep(50);
+
+            //assert
+            var firstStation = airport.EntryManager.GetEntryStation(testRoute3Stations.Name, 1);
+            Assert.IsTrue(StationService.IsCurrentPlane(firstStation, "0"));
+            Thread.Sleep(TimeSpan.FromSeconds(1.05));
+
+            var secondStation = firstStation.GetLogicStationByNumber(2);
+            Assert.IsTrue(StationService.IsCurrentPlane(secondStation, "0"));
+            Assert.IsFalse(StationService.HasCurrentPlane(firstStation));
+            Thread.Sleep(TimeSpan.FromSeconds(3.05));
+
+            var thirdStation = secondStation.GetLogicStationByNumber(3);
+            Assert.IsTrue(StationService.IsCurrentPlane(thirdStation, "0"));
+            Assert.IsFalse(StationService.HasCurrentPlane(secondStation));
+            Thread.Sleep(TimeSpan.FromSeconds(2.05));
+
+            Assert.IsFalse(StationService.HasCurrentPlane(thirdStation));
         }
     }
 }

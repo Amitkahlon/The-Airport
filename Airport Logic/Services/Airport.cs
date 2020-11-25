@@ -9,14 +9,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using static Airport_Logic.Logic_Models.LogicStation;
 
 namespace Airport_Logic
 {
     public class Airport : IPushPlane
     {
         private readonly IStationProvider stationProvider;
-        //public Dictionary<string, List<LogicStation>> EntryPoints { get; private set; }
         public EntryPointsManager EntryManager { get; private set; }
+        public event LogicStationEvent ChangeInStateEvent;
 
         public Airport(Action<AirportBuilder> builder)
         {
@@ -25,7 +26,10 @@ namespace Airport_Logic
 
             AirportBuilder airportBuilder = new AirportBuilder(stationProvider, EntryManager);
             builder.Invoke(airportBuilder);
+            stationProvider.ChangeInStateEvent += ChangeInStateEvent;
         }
+
+
 
         public void PushPlane(Plane plane)
         {
@@ -51,14 +55,14 @@ namespace Airport_Logic
             }
             public void AddRoute(IRoute route)
             {
-                try
-                {
-                    entryManager.InitializeEntryPoint(route.Name);
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentException("routeName cannot be null and must be unique");
-                }
+                //try
+                //{
+                entryManager.InitializeEntryPoint(route.Name);
+                //}
+                //catch (Exception)
+                //{
+                //    throw new ArgumentException("routeName cannot be null and must be unique");
+                //}
 
                 int stationNum = 0; //0 == entry point
                 bool isItarates = true;
@@ -92,9 +96,9 @@ namespace Airport_Logic
                             }
                             else
                             {
-                                var stationToAdd = stationService.GetStation(stationId);
+                                LogicStation stationToAdd = stationService.GetStation(stationId);
                                 //if in the entry point, add the station to the entryManager.
-                                if (stationNum == 0) 
+                                if (stationNum == 0)
                                 {
                                     entryManager.AddStationToEntry(route.Name, stationToAdd);
                                 }

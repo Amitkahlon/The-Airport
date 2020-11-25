@@ -1,31 +1,44 @@
-﻿using GalaSoft.MvvmLight;
+﻿using Airport_Common.Models;
+using AirportClient.Models;
+using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 
-namespace ChatClient.ViewModels
+namespace AirportClient.ViewModels
 {
     public class HomeViewModel : ViewModelBase
     {
-        public ObservableCollection<User> Users { get; set; }
+        public ObservableCollection<AirportViewModel> Airports { get; set; }
 
         public HomeViewModel()
         {
-            Users = new ObservableCollection<User>()
+            var airportTest = new AirportViewModel()
             {
-                new User
+                AiportNumber = 1,
+                AirportName = "Ben Gurion",
+                Stations = new List<Station>()
                 {
-                    name = "amit",
-                    age = 21
+                    new Station()
+                    {
+                        StationNumber = 1,
+                        StationName = "Fuel",
+                        WaitingTime = TimeSpan.FromSeconds(15),
+                    }
                 }
             };
-        }
-    }
 
-    public class User
-    {
-        public int age { get; set; }
-        public string name{ get; set; }
+
+            Airports = new ObservableCollection<AirportViewModel>()
+           {
+               airportTest,
+               airportTest,
+               airportTest,
+               airportTest,
+               airportTest,
+
+           };
+        }
     }
 }

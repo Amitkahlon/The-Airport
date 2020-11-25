@@ -1,19 +1,93 @@
-﻿<UserControl x:Class="ChatClient.Views.HomeView"
+﻿<UserControl x:Class="AirportClient.Views.HomeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ChatClient.Views"
+             xmlns:local="clr-namespace:AirportClient.Views"
              mc:Ignorable="d" 
              DataContext="{Binding Source={StaticResource Locator}, Path=HomeViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <ListView DataContext="{Binding Users}">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ListView ItemsSource="{Binding Airports}"
+                                  IsTextSearchEnabled="True"
+                                  TextSearch.TextPath="{Binding Name}"
+                                  Background="White">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="dsa"/>
+                    <VirtualizingStackPanel Tag="{Binding AiportNumber}"
+                                                            Orientation="Vertical">
+                        <Image Source="https://im-media.voltron.voanews.com/Drupal/01live-166/styles/892x501/s3/ap-images/2020/02/28e761bcf5ef2c3c83588881600b1e43.jpg?itok=PvgdzUIa"
+                                               Width="100"
+                                               Height="100" />
+                        <Label Content="{Binding AiportNumber}"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center" />
+                        <Label Content="{Binding AirportName}"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center" />
+                        <Label Content="{Binding Stations.Count}"
+                                               HorizontalContentAlignment="Center"
+                                               VerticalContentAlignment="Center" />
+                    </VirtualizingStackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment"
+                                            Value="Center" />
+                    <Setter Property="VerticalContentAlignment"
+                                            Value="Center" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate x:Name="ItemsPanelTemplate">
+                    <UniformGrid x:Name="ContentUniformGrid"
+                                                 Columns="{Binding Value, ElementName=ElementSlider, Mode=OneWay}" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+        </ListView>
+    </Grid>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--<Grid>
+        <ListView ItemsSource="{Binding Airports}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Background="#D1494242">
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Airport Number: </Label>
+                            <TextBlock Text="{Binding AiportNumber}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Airport Name: </Label>
+                            <TextBlock Text="{Binding AirportName}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Station Count:</Label>
+                            <TextBlock Text="{Binding Stations.Count}"/>
+                        </StackPanel>
+                    </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-    </Grid>
+    </Grid>-->
 </UserControl>

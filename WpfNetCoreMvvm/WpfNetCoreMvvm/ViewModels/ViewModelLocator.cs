@@ -1,4 +1,4 @@
-﻿using ChatClient.ViewModels;
+﻿using AirportClient.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace WpfNetCoreMvvm.ViewModels

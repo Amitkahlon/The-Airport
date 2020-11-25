@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ChatClient.ViewModels
+namespace AirportClient.ViewModels
 {
     public class DatabaseViewModel : ViewModelBase
     {

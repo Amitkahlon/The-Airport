@@ -10,7 +10,7 @@ namespace Airport_Logic.Logic_Models
 {
     public class LogicStation : Station, IEnterStation, IWaitingLine
     {
-        private event Action ChangeInStateEvent;
+        internal event LogicStationEvent ChangeInStateEvent;
         public ConcurrentQueue<Plane> WaitingLine { get; private set; }
         private bool isStationOccupied;
         private readonly object waitingLineLock = new object();
@@ -29,7 +29,7 @@ namespace Airport_Logic.Logic_Models
             }
         }
 
-        private void PushToWait()
+        private void PushToWait(object sender, LogicStationChangedEventArgs args)
         {
             Task.Run(() =>
             {
@@ -48,28 +48,31 @@ namespace Airport_Logic.Logic_Models
             {
                 Task.Run(() =>
                 {
+
                     Wait(plane);
+
                 });
-                ChangeInStateEvent?.Invoke();
+
+                ChangeInStateEvent?.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
             }
             else
             {
                 WaitingLine.Enqueue(plane);
-                ChangeInStateEvent?.Invoke();
+                ChangeInStateEvent?.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
             }
         }
 
         private void Wait(Plane plane)
         {
             isStationOccupied = true;
-            lock (waitingLineLock) 
+            lock (waitingLineLock)
             {
                 base.CurrentPlane = plane;
                 Thread.Sleep(base.WaitingTime);
                 base.CurrentPlane = null;
             }
             isStationOccupied = false;
-            ChangeInStateEvent?.Invoke();
+            ChangeInStateEvent?.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
 
             LogicStation nextStation = GetBestStation(plane);
             if (nextStation != null)
@@ -91,6 +94,7 @@ namespace Airport_Logic.Logic_Models
             {
                 throw new Exception("Could not be empty, if we reach the end we receive -1");
             }
+            //todo: fix bool
             else if (nextStationNumbers.Any(staionNum => staionNum == 0)) //if it reached the end
             {
                 return null;
@@ -143,6 +147,22 @@ namespace Airport_Logic.Logic_Models
         {
             return (LogicStation)base.ConnectedStations.First(s => s.StationNumber == stationNumber);
         }
+
+        public class LogicStationChangedEventArgs : EventArgs
+        {
+            public Queue<Plane> WaitingLine { get; }
+            public Plane CurrentPlane { get; }
+            public DateTime ChangeTime { get; }
+
+            public LogicStationChangedEventArgs(IEnumerable<Plane> waitingLine, Plane currentPlane, DateTime changeTime)
+            {
+                this.WaitingLine = new Queue<Plane>(waitingLine);
+                CurrentPlane = currentPlane;
+                ChangeTime = changeTime;
+            }
+        }
+
+        public delegate void LogicStationEvent(object sender, LogicStationChangedEventArgs args);
     }
 
 }

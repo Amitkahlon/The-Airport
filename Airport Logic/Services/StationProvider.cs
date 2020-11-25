@@ -5,11 +5,13 @@ using System.Text;
 using System.Linq;
 using Airport_Common.Models;
 using Airport_Logic.Interfaces;
+using static Airport_Logic.Logic_Models.LogicStation;
 
 namespace Airport_Logic.Services
 {
     internal class StationProvider : IStationProvider
     {
+        public event LogicStationEvent ChangeInStateEvent;
         private readonly List<LogicStation> stations = new List<LogicStation>();
         private int stationCount = 0;
 
@@ -26,13 +28,18 @@ namespace Airport_Logic.Services
                 throw new ArgumentException("Station number must be unique");
             }
 
-            stations.Add(new LogicStation()
+            LogicStation station = new LogicStation()
             {
-                    StationNumber = stationCount,
-                    StationName = stationName,
-                    WaitingTime = timeSpan,
-            });
+                StationNumber = stationCount,
+                StationName = stationName,
+                WaitingTime = timeSpan,
+            };
+
+            station.ChangeInStateEvent += ChangeInStateEvent;
+            stations.Add(station);
         }
+
+
         public LogicStation GetStation(int stationNum)
         {
             if (stationNum == 0)

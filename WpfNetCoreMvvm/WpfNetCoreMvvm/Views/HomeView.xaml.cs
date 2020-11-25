@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ChatClient.Views
+namespace AirportClient.Views
 {
     /// <summary>
     /// Interaction logic for HomeView.xaml

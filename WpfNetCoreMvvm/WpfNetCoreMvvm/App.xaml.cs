@@ -1,5 +1,5 @@
-﻿using ChatClient.ViewModels;
-using ChatClient.Views;
+﻿using AirportClient.ViewModels;
+using AirportClient.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

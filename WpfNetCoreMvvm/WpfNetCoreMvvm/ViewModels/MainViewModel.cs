@@ -1,5 +1,5 @@
-﻿using ChatClient.ViewModels;
-using ChatClient.Views;
+﻿using AirportClient.ViewModels;
+using AirportClient.Views;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Extensions.Options;
@@ -25,7 +25,7 @@ namespace WpfNetCoreMvvm.ViewModels
             set { Set(ref _control, value); }
         }
 
-        Dictionary<string, UserControl> Views = new Dictionary<string, UserControl>();
+        readonly Dictionary<string, UserControl> Views = new Dictionary<string, UserControl>();
 
         public RelayCommand HomeNavCommand { get; }
         public RelayCommand DatabaseCommand { get; }
@@ -49,7 +49,8 @@ namespace WpfNetCoreMvvm.ViewModels
             Views.Add("VisualAirport", new VisualAirportView());
 
             //set the home user control.
-            //Control = Views["Home"];
+            Control = Views["Home"];
+            
 
 
             // add avaliable pages/user control

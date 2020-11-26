@@ -11,7 +11,6 @@ namespace Airport_Server
 {
     public class Startup
     {
-        private LogicService logicService;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -24,6 +23,7 @@ namespace Airport_Server
         {
             services.AddControllers();
             services.AddSingleton<AirportDataService>();
+            services.AddSingleton<LogicService>();
             services.AddSignalR();
         }
 

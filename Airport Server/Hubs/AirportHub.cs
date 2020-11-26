@@ -1,7 +1,9 @@
 ﻿using Airport_Common.Models;
 using Airport_DAL.Services;
 using Airport_Logic;
+using Airport_Server.Services;
 using Airport_Simulator;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -13,41 +15,24 @@ namespace Airport_Server.Hubs
 {
     public class AirportHub : Hub
     {
-        private Airport airport;
-        private IPlaneMaker planeMaker;
-        private readonly AirportDataService airportDataService;
+        private readonly LogicService logicService;
 
-        public AirportHub(AirportDataService airportDataService)
+        public AirportHub(LogicService logicService)
         {
-            this.airportDataService = airportDataService;
-
-            airport.ChangeInStateEvent += Airport_ChangeInStateEvent;
-
-            InitAirport();
-            InitTimer();
-            
-            
-            void InitAirport()
-            {
-                airport = new Airport(builder =>
-                {
-                    builder.AddDefualtStations();
-                    builder.AddDefualtRoute();
-                });
-            }
-            
-            void InitTimer()
-            {
-                this.planeMaker = new PlaneMaker(airport);
-                this.planeMaker.ConfigureTimer(TimeSpan.FromSeconds(5));
-                this.planeMaker.StartTimer();
-            }
+            this.logicService = logicService;
+            logicService.ChangeInStateEvent += UpdateUiOnChange;
         }
 
-        private void Airport_ChangeInStateEvent(object sender, LogicStationChangedEventArgs args)
+        public async Task SendMessageAll()
         {
-            Station station = (Station)sender;
+            await Clients.All.SendAsync("UpdateState");
+        }
+
+        private void UpdateUiOnChange(object sender, LogicStationChangedEventArgs args)
+        {
             //todo: add to logs.
         }
+
+
     }
 }

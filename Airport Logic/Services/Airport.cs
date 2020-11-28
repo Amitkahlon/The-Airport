@@ -19,17 +19,31 @@ namespace Airport_Logic
         public EntryPointsManager EntryManager { get; private set; }
         public event LogicStationEvent ChangeInStateEvent;
 
-        public Airport(Action<AirportBuilder> builder)
+
+        //private event LogicStationEvent TestEvent;
+
+
+        public string Name { get; private set; }
+
+        public Airport(Action<AirportBuilder> builder, string airportName)
         {
             stationProvider = new StationProvider();
             EntryManager = new EntryPointsManager();
 
             AirportBuilder airportBuilder = new AirportBuilder(stationProvider, EntryManager);
             builder.Invoke(airportBuilder);
-            stationProvider.ChangeInStateEvent += ChangeInStateEvent;
+            this.stationProvider.ChangeInStateEvent += this.ChangeInStateEvent;
+
+            this.Name = airportName;
+
         }
 
 
+
+        public IEnumerable<Station> GetStations()
+        {
+            return stationProvider.GetStations();
+        }
 
         public void PushPlane(Plane plane)
         {
@@ -55,14 +69,7 @@ namespace Airport_Logic
             }
             public void AddRoute(IRoute route)
             {
-                //try
-                //{
                 entryManager.InitializeEntryPoint(route.Name);
-                //}
-                //catch (Exception)
-                //{
-                //    throw new ArgumentException("routeName cannot be null and must be unique");
-                //}
 
                 int stationNum = 0; //0 == entry point
                 bool isItarates = true;

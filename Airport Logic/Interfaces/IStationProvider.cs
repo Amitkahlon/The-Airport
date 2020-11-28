@@ -11,5 +11,6 @@ namespace Airport_Logic.Interfaces
         void CreateStation(string stationName, TimeSpan timeSpan);
         LogicStation GetStation(int stationNum);
         event LogicStationEvent ChangeInStateEvent;
+        IEnumerable<LogicStation> GetStations();
     }
 }

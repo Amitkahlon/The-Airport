@@ -48,9 +48,7 @@ namespace Airport_Logic.Logic_Models
             {
                 Task.Run(() =>
                 {
-
                     Wait(plane);
-
                 });
 
                 ChangeInStateEvent?.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
@@ -72,8 +70,8 @@ namespace Airport_Logic.Logic_Models
                 base.CurrentPlane = null;
             }
             isStationOccupied = false;
-            ChangeInStateEvent?.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
-
+            //ChangeInStateEvent?.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
+            ChangeInStateEvent.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
             LogicStation nextStation = GetBestStation(plane);
             if (nextStation != null)
             {

@@ -43,7 +43,7 @@ namespace Airport_Test
                 //Add Routes
                 builder.AddRoute(new LandingRoute());
 
-            });
+            }, "Ben Gurion");
 
             // Arrange
 
@@ -110,7 +110,7 @@ namespace Airport_Test
             {
                 builder.AddDefualtStations();
                 builder.AddDefualtRoute();
-            });
+            }, "Ben Gurion");
 
             IPlaneMaker MockSimulator = new PlaneMakerMock(airport);
 
@@ -149,7 +149,7 @@ namespace Airport_Test
             {
                 builder.AddDefualtStations();
                 builder.AddDefualtRoute();
-            });
+            }, "Ben Gurion");
 
             IPlaneMaker MockSimulator = new PlaneMakerMock(airport);
 
@@ -190,7 +190,7 @@ namespace Airport_Test
             {
                 builder.AddDefualtStations();
                 builder.AddDefualtRoute();
-            });
+            }, "Ben Gurion");
 
             IPlaneMaker MockSimulator = new PlaneMakerMock(airport);
 
@@ -268,7 +268,7 @@ namespace Airport_Test
                 builder.AddStation("station3", TimeSpan.FromSeconds(1));
 
                 builder.AddRoute(testRoute3Stations);
-            });
+            }, "Ben Gurion");
 
             var planeMaker = new PlaneMakerMock(airport);
 
@@ -308,7 +308,7 @@ namespace Airport_Test
                 builder.AddStation("station3", TimeSpan.FromSeconds(2));
 
                 builder.AddRoute(testRoute3Stations);
-            });
+            }, "Ben Gurion");
 
             var planeMaker = new PlaneMakerMock(airport);
 

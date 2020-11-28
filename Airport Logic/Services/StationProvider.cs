@@ -36,9 +36,15 @@ namespace Airport_Logic.Services
             };
 
             station.ChangeInStateEvent += ChangeInStateEvent;
+            //station.ChangeInStateEvent += TestEvent;
+
             stations.Add(station);
         }
 
+        //private void TestEvent(object sender, LogicStationChangedEventArgs args)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public LogicStation GetStation(int stationNum)
         {
@@ -54,6 +60,11 @@ namespace Airport_Logic.Services
             {
                 throw new ArgumentException("Station does not exist");
             }
+        }
+
+        public IEnumerable<LogicStation> GetStations()
+        {
+            return stations;
         }
     }
 }

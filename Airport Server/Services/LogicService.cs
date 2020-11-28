@@ -37,7 +37,7 @@ namespace Airport_Server.Services
                 {
                     builder.AddDefualtStations();
                     builder.AddDefualtRoute();
-                });
+                }, "Ben Gurion");
             }
 
             void InitTimer()
@@ -52,6 +52,11 @@ namespace Airport_Server.Services
             Station station = (Station)sender;
 
             //todo: update server
+        }
+
+        public IEnumerable<Station> GetStations()
+        {
+            return airport.GetStations();
         }
     }
 }

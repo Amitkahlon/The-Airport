@@ -1,4 +1,5 @@
-﻿using Airport_Logic.Logic_Models;
+﻿using Airport_Common.Models;
+using Airport_Logic.Logic_Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

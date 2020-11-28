@@ -1,6 +1,5 @@
 ﻿using Airport_Common.Models;
 using Airport_DAL.Services;
-using Airport_Logic;
 using Airport_Server.Services;
 using Airport_Simulator;
 using Microsoft.AspNetCore.Builder;
@@ -20,17 +19,27 @@ namespace Airport_Server.Hubs
         public AirportHub(LogicService logicService)
         {
             this.logicService = logicService;
-            logicService.ChangeInStateEvent += UpdateUiOnChange;
+            logicService.ChangeInStateEvent += AirportChangeEvent;
         }
 
-        public async Task SendMessageAll()
+        public async Task SendAirportsStatus()
         {
-            await Clients.All.SendAsync("UpdateState");
+            AirportStatus airportStatus = new AirportStatus(logicService.GetStations());
+            IEnumerable<AirportStatus> airports = new List<AirportStatus>()
+            {
+                airportStatus
+            };
+            await Clients.All.SendAsync("ReceiveAirports", airports);
         }
 
-        private void UpdateUiOnChange(object sender, LogicStationChangedEventArgs args)
+        private async void AirportChangeEvent(object sender, LogicStationChangedEventArgs args)
         {
             //todo: add to logs.
+            //todo: send to ui
+
+            await SendAirportsStatus();
+
+
         }
 
 

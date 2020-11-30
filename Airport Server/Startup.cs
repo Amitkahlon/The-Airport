@@ -11,6 +11,7 @@ namespace Airport_Server
 {
     public class Startup
     {
+        private UpdateClientService updateClientService;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -25,11 +26,14 @@ namespace Airport_Server
             services.AddSingleton<AirportDataService>();
             services.AddSingleton<LogicService>();
             services.AddSignalR();
+            services.AddSingleton<UpdateClientService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            this.updateClientService = app.ApplicationServices.GetService<UpdateClientService>();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

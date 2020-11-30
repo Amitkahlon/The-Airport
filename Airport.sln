@@ -11,16 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport Logic", "Airport Lo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport Common", "Airport Common\Airport Common.csproj", "{8B97EB61-5A4C-428E-8B5F-AF763479C790}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BAD7E019-1BAF-431C-AEC0-F8BA7026084B}"
-	ProjectSection(SolutionItems) = preProject
-		Notes.txt = Notes.txt
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport Test", "Airport Test\Airport Test.csproj", "{CE079044-C188-4DF7-8256-A299BBB0B53B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport DAL", "Airport DAL\Airport DAL.csproj", "{3B443D38-0C1C-4281-A644-AE7BD3F01DF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plane Maker", "Plane Maker\Plane Maker.csproj", "{93A3A8A3-C15B-45F4-96A0-A777010C9402}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plane Maker", "Plane Maker\Plane Maker.csproj", "{93A3A8A3-C15B-45F4-96A0-A777010C9402}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

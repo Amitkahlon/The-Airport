@@ -1,7 +1,9 @@
 ﻿using Airport_Common.Models;
 using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace WpfNetCoreMvvm.Services
@@ -9,6 +11,7 @@ namespace WpfNetCoreMvvm.Services
     public class ConnectionService : IConnectionService
     {
         private HubConnection connection;
+        public event EventHandler<IEnumerable<AirportStatus>> ReceiveAirports;
         public ConnectionService()
         {
             InitialConnection();
@@ -35,7 +38,7 @@ namespace WpfNetCoreMvvm.Services
             {
                 await connection.StartAsync();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //todo: show error message
             }
@@ -43,9 +46,14 @@ namespace WpfNetCoreMvvm.Services
 
         private void SetSingalRFuncs()
         {
-            connection.On<IEnumerable<AirportStatus>>("ReceiveAirports", (airports) =>
+            connection.On<string>("ReceiveAirports", (jsonAirports) =>
             {
-                //todo: add airport status to list
+                IEnumerable<AirportStatus> airports = JsonConvert.DeserializeObject<IEnumerable<AirportStatus>>(jsonAirports, new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto
+                });
+
+                ReceiveAirports?.Invoke(this, airports);
             });
         }
 

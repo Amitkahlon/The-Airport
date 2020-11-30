@@ -31,9 +31,6 @@ namespace Airport_Common.Interfaces
         /// <returns>List of next avaliable station numbers.</returns>
         IEnumerable<int> GetNextAvailableRoute(int stationNumber);
 
-        /// <summary>
-        /// Name of the route
-        /// </summary>
         string Name { get; }
 
     }

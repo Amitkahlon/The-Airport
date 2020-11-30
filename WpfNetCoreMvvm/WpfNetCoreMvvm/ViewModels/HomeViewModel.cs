@@ -13,40 +13,18 @@ namespace AirportClient.ViewModels
     {
         private readonly IConnectionService service;
 
-        public ObservableCollection<AirportViewModel> Airports { get; set; }
+        public ObservableCollection<AirportStatus> Airports { get; set; }
 
 
         public HomeViewModel(IConnectionService service)
         {
             this.service = service;
+            this.service.ReceiveAirports += ReceiveAirportsEventHandler;
         }
-        //public HomeViewModel()
-        //{
-        //    var airportTest = new AirportViewModel()
-        //    {
-        //        AiportNumber = 1,
-        //        AirportName = "Ben Gurion",
-        //        Stations = new List<Station>()
-        //        {
-        //            new Station()
-        //            {
-        //                StationNumber = 1,
-        //                StationName = "Fuel",
-        //                WaitingTime = TimeSpan.FromSeconds(15),
-        //            }
-        //        }
-        //    };
 
-
-        //    Airports = new ObservableCollection<AirportViewModel>()
-        //   {
-        //       airportTest,
-        //       airportTest,
-        //       airportTest,
-        //       airportTest,
-        //       airportTest,
-
-        //   };
-        //}
+        private void ReceiveAirportsEventHandler(object sender, IEnumerable<AirportStatus> AirportsArgs)
+        {
+            Airports = new ObservableCollection<AirportStatus>(AirportsArgs);
+        }
     }
 }

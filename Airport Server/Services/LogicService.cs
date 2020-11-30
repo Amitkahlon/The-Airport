@@ -14,22 +14,21 @@ namespace Airport_Server.Services
     {
         private readonly AirportDataService dataService;
         private IPlaneMaker planeMaker;
-        private Airport airport;
+        public IAirport Airport { get; private set; }
         internal event LogicStationEvent ChangeInStateEvent;
         public LogicService(AirportDataService dataService)
         {
             this.dataService = dataService;
 
-            airport = SetAirport();
+            Airport airport = SetAirport();
 
-            airport.ChangeInStateEvent += ChangeInStateEvent;
+            airport.ChangeInState += RaiseChangeInStateEvent;
             ChangeInStateEvent += UpdateDatabase;
 
             this.planeMaker = new PlaneMaker(airport);
+            this.Airport = airport;
 
             InitTimer();
-
-
 
             Airport SetAirport()
             {
@@ -47,6 +46,11 @@ namespace Airport_Server.Services
             }
         }
 
+        private void RaiseChangeInStateEvent(object sender, LogicStationChangedEventArgs args)
+        {
+            ChangeInStateEvent?.Invoke(sender, args);
+        }
+
         private void UpdateDatabase(object sender, LogicStationChangedEventArgs args)
         {
             Station station = (Station)sender;
@@ -56,7 +60,7 @@ namespace Airport_Server.Services
 
         public IEnumerable<Station> GetStations()
         {
-            return airport.GetStations();
+            return Airport.GetStations();
         }
     }
 }

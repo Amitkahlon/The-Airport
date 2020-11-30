@@ -1,15 +1,16 @@
 ﻿using Airport_Common.Interfaces;
+using Airport_Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Airport_Test.TestRoute
 {
-    internal class TestRoute3Stations : IRoute
+    internal class TestRoute3Stations : Route
     {
-        public string Name => "ThreeStationsTestRoute";
+        public new string Name => "ThreeStationsTestRoute";
 
-        public IEnumerable<int> GetNextAvailableRoute(int stationNumber)
+        public new IEnumerable<int> GetNextAvailableRoute(int stationNumber)
         {
             switch (stationNumber)
             {

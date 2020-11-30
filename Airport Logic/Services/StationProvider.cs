@@ -11,10 +11,14 @@ namespace Airport_Logic.Services
 {
     internal class StationProvider : IStationProvider
     {
-        public event LogicStationEvent ChangeInStateEvent;
         private readonly List<LogicStation> stations = new List<LogicStation>();
+        private readonly IRaiseChangeInStateEvent changeInStateEvent;
         private int stationCount = 0;
 
+        public StationProvider(IRaiseChangeInStateEvent changeInStateEvent)
+        {
+            this.changeInStateEvent = changeInStateEvent;
+        }
         public void CreateStation(string stationName, TimeSpan timeSpan)
         {
             stationCount++;
@@ -35,16 +39,11 @@ namespace Airport_Logic.Services
                 WaitingTime = timeSpan,
             };
 
-            station.ChangeInStateEvent += ChangeInStateEvent;
-            //station.ChangeInStateEvent += TestEvent;
+            station.ChangeInState += this.changeInStateEvent.RaiseChangeInStateEvent;
 
             stations.Add(station);
         }
 
-        //private void TestEvent(object sender, LogicStationChangedEventArgs args)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public LogicStation GetStation(int stationNum)
         {

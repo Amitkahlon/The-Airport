@@ -6,13 +6,15 @@ namespace Airport_Common.Models
 {
     public class AirportStatus
     {
-        public IEnumerable<Station> Stations { get; private set; }
+        public IEnumerable<Station> Stations { get; set; }
+        public string Name { get; set; }
 
         public AirportStatus() { }
 
-        public AirportStatus(IEnumerable<Station> stations)
+        public AirportStatus(IEnumerable<Station> stations, string name)
         {
             Stations = stations;
+            this.Name = name;
         }
     }
 }

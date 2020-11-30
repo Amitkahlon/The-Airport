@@ -1,4 +1,5 @@
 ﻿using Airport_Common.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,6 +15,7 @@ namespace Airport_Common.Models
         public int PassangersCount { get; set; }
         public string Country{ get; set; }
 
-        public IRoute PlaneRoute { get; set; }
+        public Route PlaneRoute { get; set; }
+
     }
 }

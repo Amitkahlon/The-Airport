@@ -14,7 +14,7 @@ namespace Airport_Simulator
         private readonly string[] planeTypes = { "F-16 Fighting Falcon", "BOEING 787 DREAMLINER", "AIRBUS A350", "AIRBUS A380" };
         private readonly string[] countries = { "Israel", "United Arab Emirates", "Thailand", "United States", "Spain", "England" };
         private readonly Color[] colors = { Color.White, Color.Black, Color.Blue, Color.Yellow, Color.Green, Color.Red };
-        private readonly IRoute[] routes = { new LandingRoute()};
+        private readonly Route[] routes = { new LandingRoute()};
         //todo: add Takeoff route
 
         public PlaneMaker(IPushPlane plane)
@@ -74,7 +74,7 @@ namespace Airport_Simulator
             airPort.PushPlane(newPlane);
         }
 
-        public void PushPlane(IRoute route)
+        public void PushPlane(Route route)
         {
             Random random = new Random();
 

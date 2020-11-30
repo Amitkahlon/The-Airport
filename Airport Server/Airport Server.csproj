@@ -11,13 +11,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Airport DAL\Airport DAL.csproj" />
+    <ProjectReference Include="..\Airport Logic\Airport Logic.csproj" />
     <ProjectReference Include="..\Plane Maker\Plane Maker.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Airport Logic">
-      <HintPath>..\Airport Logic\obj\Debug\netstandard2.0\Airport Logic.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 

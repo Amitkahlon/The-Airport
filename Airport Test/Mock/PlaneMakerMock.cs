@@ -51,7 +51,7 @@ namespace Airport_Test.Mock
             id++;
         }
 
-        public void PushPlane(IRoute route)
+        public void PushPlane(Route route)
         {
             pushPlane.PushPlane(new Plane()
             {

@@ -24,12 +24,12 @@
                         <Image Source="https://im-media.voltron.voanews.com/Drupal/01live-166/styles/892x501/s3/ap-images/2020/02/28e761bcf5ef2c3c83588881600b1e43.jpg?itok=PvgdzUIa"
                                                Width="100"
                                                Height="100" />
-                        <Label Content="{Binding AiportNumber}"
+                        <Label Content="{Binding Name}"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center" />
-                        <Label Content="{Binding AirportName}"
+                        <!--<Label Content="{Binding Stations.Count}"
                                                HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center" />
+                                               VerticalContentAlignment="Center" />-->
                         <Label Content="{Binding Stations.Count}"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center" />

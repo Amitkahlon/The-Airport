@@ -13,32 +13,23 @@ using static Airport_Logic.Logic_Models.LogicStation;
 
 namespace Airport_Logic
 {
-    public class Airport : IPushPlane
+    public class Airport : IPushPlane, IRaiseChangeInStateEvent, IAirport
     {
         private readonly IStationProvider stationProvider;
         public EntryPointsManager EntryManager { get; private set; }
-        public event LogicStationEvent ChangeInStateEvent;
-
-
-        //private event LogicStationEvent TestEvent;
-
-
+        public event LogicStationEvent ChangeInState;
         public string Name { get; private set; }
 
         public Airport(Action<AirportBuilder> builder, string airportName)
         {
-            stationProvider = new StationProvider();
+            stationProvider = new StationProvider(this);
             EntryManager = new EntryPointsManager();
 
             AirportBuilder airportBuilder = new AirportBuilder(stationProvider, EntryManager);
             builder.Invoke(airportBuilder);
-            this.stationProvider.ChangeInStateEvent += this.ChangeInStateEvent;
 
             this.Name = airportName;
-
         }
-
-
 
         public IEnumerable<Station> GetStations()
         {
@@ -53,6 +44,10 @@ namespace Airport_Logic
             });
         }
 
+        public void RaiseChangeInStateEvent(object sender, LogicStationChangedEventArgs args)
+        {
+            this.ChangeInState?.Invoke(sender, args);
+        }
 
         public class AirportBuilder
         {

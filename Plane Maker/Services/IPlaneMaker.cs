@@ -1,4 +1,5 @@
 ﻿using Airport_Common.Interfaces;
+using Airport_Common.Models;
 using System;
 
 namespace Airport_Simulator
@@ -18,7 +19,7 @@ namespace Airport_Simulator
         /// <summary>
         /// Pushes a plane into the airport
         /// </summary>
-        void PushPlane(IRoute route);
+        void PushPlane(Route route);
         /// <summary>
         /// Pushes a plane into the airport with a random route.
         /// </summary>

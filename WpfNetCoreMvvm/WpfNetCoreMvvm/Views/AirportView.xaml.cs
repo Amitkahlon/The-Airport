@@ -11,17 +11,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AirportClient.Views
+namespace ChatClient.Views
 {
     /// <summary>
-    /// Interaction logic for HomeView.xaml
+    /// Interaction logic for AirportView.xaml
     /// </summary>
-    public partial class HomeView : UserControl
+    public partial class AirportView : UserControl
     {
-        public HomeView()
+        public AirportView()
         {
             InitializeComponent();
-
         }
     }
 }

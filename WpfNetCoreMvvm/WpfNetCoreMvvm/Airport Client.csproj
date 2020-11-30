@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <AssemblyName>AirportClient</AssemblyName>
-    <RootNamespace>ChatClient</RootNamespace>
+    <RootNamespace>AirportClient</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

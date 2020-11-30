@@ -1,5 +1,6 @@
 ﻿using AirportClient.ViewModels;
 using AirportClient.Views;
+using ChatClient.Services;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Extensions.Options;
@@ -16,7 +17,13 @@ namespace WpfNetCoreMvvm.ViewModels
     {
         private readonly AppSettings settings;
 
-        private readonly IConnectionService service;
+        public readonly NavigationService navigationService;
+
+        readonly Dictionary<string, UserControl> Views = new Dictionary<string, UserControl>();
+
+        public RelayCommand HomeNavCommand { get; }
+        public RelayCommand DatabaseCommand { get; }
+        public RelayCommand VisualAirportCommand { get; }
 
         private UserControl _control;
         public UserControl Control
@@ -25,18 +32,11 @@ namespace WpfNetCoreMvvm.ViewModels
             set { Set(ref _control, value); }
         }
 
-        readonly Dictionary<string, UserControl> Views = new Dictionary<string, UserControl>();
-
-        public RelayCommand HomeNavCommand { get; }
-        public RelayCommand DatabaseCommand { get; }
-        public RelayCommand VisualAirportCommand { get; }
-
-
-
-        public MainViewModel(IOptions<AppSettings> options, IConnectionService service)
+        public MainViewModel(IOptions<AppSettings> options, NavigationService navigationService)
         {
             settings = options.Value;
-            this.service = service;
+            this.navigationService = navigationService;
+
             //commands
             HomeNavCommand = new RelayCommand(HomeNav);
             DatabaseCommand = new RelayCommand(DatabaseNav);
@@ -49,31 +49,30 @@ namespace WpfNetCoreMvvm.ViewModels
             Views.Add("VisualAirport", new VisualAirportView());
 
             //set the home user control.
-            Control = Views["Home"];
-            
+            this.Control = Views["Home"];
 
+            //subscribe event
+            navigationService.ContentChanged += ContentChangedEventHandler;
+        }
 
-            // add avaliable pages/user control
-
-            //set starting page
-
+        private void ContentChangedEventHandler(object sender, UserControl control)
+        {
+            this.Control = control;
         }
 
         private void DatabaseNav()
         {
-            Control = Views["Database"];
+            this.navigationService.ChangeContent(Views["Database"]);
         }
 
         private void VisualAirport()
         {
-            Control = Views["VisualAirport"];
+            this.navigationService.ChangeContent(Views["VisualAirport"]);
         }
 
         private void HomeNav()
         {
-            Control = Views["Home"];
+            this.navigationService.ChangeContent(Views["Home"]);
         }
-
-       
     }
 }

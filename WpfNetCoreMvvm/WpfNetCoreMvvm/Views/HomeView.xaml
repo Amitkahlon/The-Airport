@@ -13,14 +13,16 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        
         <ListView ItemsSource="{Binding Airports}"
-                                  IsTextSearchEnabled="True"
-                                  TextSearch.TextPath="{Binding Name}"
-                                  Background="White">
+                  SelectedItem="{Binding SelectedAirport}"
+                  IsTextSearchEnabled="True"
+                  TextSearch.TextPath="{Binding Name}"
+                  Background="White">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <VirtualizingStackPanel Tag="{Binding AiportNumber}"
-                                                            Orientation="Vertical">
+                                               Orientation="Vertical">
                         <Image Source="https://im-media.voltron.voanews.com/Drupal/01live-166/styles/892x501/s3/ap-images/2020/02/28e761bcf5ef2c3c83588881600b1e43.jpg?itok=PvgdzUIa"
                                                Width="100"
                                                Height="100" />
@@ -33,6 +35,7 @@
                         <Label Content="{Binding Stations.Count}"
                                                HorizontalContentAlignment="Center"
                                                VerticalContentAlignment="Center" />
+                        <Button Content="View Details" Command="{Binding DataContext.ViewDetailsCommand, RelativeSource={RelativeSource AncestorType=ListView}}"/>
                     </VirtualizingStackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -52,42 +55,4 @@
             </ListView.ItemsPanel>
         </ListView>
     </Grid>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!--<Grid>
-        <ListView ItemsSource="{Binding Airports}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Background="#D1494242">
-                        <StackPanel Orientation="Horizontal">
-                            <Label>Airport Number: </Label>
-                            <TextBlock Text="{Binding AiportNumber}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label>Airport Name: </Label>
-                            <TextBlock Text="{Binding AirportName}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <Label>Station Count:</Label>
-                            <TextBlock Text="{Binding Stations.Count}"/>
-                        </StackPanel>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </Grid>-->
 </UserControl>

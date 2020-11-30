@@ -1,5 +1,8 @@
 ﻿using AirportClient.ViewModels;
 using AirportClient.Views;
+using ChatClient.Services;
+using ChatClient.ViewModels;
+using ChatClient.Views;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,12 +46,14 @@ namespace WpfNetCoreMvvm
         {
             services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
             services.AddScoped<IConnectionService, ConnectionService>();
+            services.AddSingleton<NavigationService>();
 
             // Register all ViewModels.
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<HomeViewModel>();
             services.AddSingleton<DatabaseViewModel>();
             services.AddSingleton<VisualAirportViewModel>();
+            services.AddSingleton<AirportViewModel>();
 
 
 
@@ -57,6 +62,8 @@ namespace WpfNetCoreMvvm
             services.AddTransient<HomeView>();
             services.AddTransient<DatabaseView>();
             services.AddTransient<VisualAirportView>();
+            services.AddTransient<AirportView>();
+
         }
 
         protected override async void OnStartup(StartupEventArgs e)

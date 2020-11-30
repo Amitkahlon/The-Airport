@@ -15,7 +15,6 @@ namespace Airport_Server.Services
     {
         private readonly LogicService logicService;
         private readonly IHubContext<AirportHub> hubContext;
-        private int i;
 
         public UpdateClientService(LogicService logicService, IHubContext<AirportHub> hubContext)
         {
@@ -35,19 +34,14 @@ namespace Airport_Server.Services
             IEnumerable<AirportStatus> airports = new List<AirportStatus>()
             {
                 airportStatus,
+                airportStatus,
+                airportStatus,
             };
 
-            string jsonAirpots = JsonConvert.SerializeObject(airports, new JsonSerializerSettings()
-            {
-                
-            });
-
+            string jsonAirpots = JsonConvert.SerializeObject(airports);
 
             await hubContext.Clients.All.SendAsync("ReceiveAirports", jsonAirpots);
-            //debug
-            //todo: remember to remove
-            Debug.WriteLine(this.i);
-            this.i++;
+          
         }
     }
 }

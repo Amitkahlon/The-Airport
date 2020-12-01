@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport Server", "Airport Server\Airport Server.csproj", "{E62EC372-8372-4EAF-8AC3-23A2738682CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport Client", "WpfNetCoreMvvm\WpfNetCoreMvvm\Airport Client.csproj", "{ACCB863D-6C3F-4C97-A1F4-74DFE76D37A1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport Logic", "Airport Logic\Airport Logic.csproj", "{18E06278-8096-4E99-9359-14942477E20C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport Common", "Airport Common\Airport Common.csproj", "{8B97EB61-5A4C-428E-8B5F-AF763479C790}"
@@ -16,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport DAL", "Airport DAL\Airport DAL.csproj", "{3B443D38-0C1C-4281-A644-AE7BD3F01DF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plane Maker", "Plane Maker\Plane Maker.csproj", "{93A3A8A3-C15B-45F4-96A0-A777010C9402}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airport Client", "Airport Client\Airport Client\Airport Client.csproj", "{ECAD6E80-AEA3-43F9-ADDB-3E45085C4A53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +27,6 @@ Global
 		{E62EC372-8372-4EAF-8AC3-23A2738682CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E62EC372-8372-4EAF-8AC3-23A2738682CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E62EC372-8372-4EAF-8AC3-23A2738682CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ACCB863D-6C3F-4C97-A1F4-74DFE76D37A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ACCB863D-6C3F-4C97-A1F4-74DFE76D37A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACCB863D-6C3F-4C97-A1F4-74DFE76D37A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACCB863D-6C3F-4C97-A1F4-74DFE76D37A1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{18E06278-8096-4E99-9359-14942477E20C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{18E06278-8096-4E99-9359-14942477E20C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18E06278-8096-4E99-9359-14942477E20C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +47,10 @@ Global
 		{93A3A8A3-C15B-45F4-96A0-A777010C9402}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93A3A8A3-C15B-45F4-96A0-A777010C9402}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93A3A8A3-C15B-45F4-96A0-A777010C9402}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECAD6E80-AEA3-43F9-ADDB-3E45085C4A53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECAD6E80-AEA3-43F9-ADDB-3E45085C4A53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECAD6E80-AEA3-43F9-ADDB-3E45085C4A53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECAD6E80-AEA3-43F9-ADDB-3E45085C4A53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

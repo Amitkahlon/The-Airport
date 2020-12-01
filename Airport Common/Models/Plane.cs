@@ -9,13 +9,18 @@ namespace Airport_Common.Models
 {
     public class Plane : IRouteable
     {
+
         public string FlightNumber { get; set; }
         public Color Color { get; set; }
-        public string AirplaneType{ get; set; }
+        public string AirplaneType { get; set; }
         public int PassangersCount { get; set; }
-        public string Country{ get; set; }
+        public string Country { get; set; }
 
         public Route PlaneRoute { get; set; }
 
+        public override string ToString()
+        {
+            return $"{FlightNumber}, {PlaneRoute.Name}";
+        }
     }
 }

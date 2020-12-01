@@ -1,4 +1,5 @@
 ﻿using Airport_Common.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -10,8 +11,10 @@ namespace Airport_Logic.Logic_Models
 {
     public class LogicStation : Station, IEnterStation, IWaitingLine
     {
-        internal event LogicStationEvent ChangeInState;
+        //To avoid serializing any property from the logic project, should only serialize properties from common.
+        [JsonIgnore]
         public ConcurrentQueue<Plane> WaitingLine { get; private set; }
+        internal event LogicStationEvent ChangeInState;
         private bool isStationOccupied;
         private readonly object waitingLineLock = new object();
 
@@ -50,8 +53,6 @@ namespace Airport_Logic.Logic_Models
                 {
                     Wait(plane);
                 });
-
-                ChangeInState?.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
             }
             else
             {
@@ -62,13 +63,15 @@ namespace Airport_Logic.Logic_Models
 
         private void Wait(Plane plane)
         {
-            isStationOccupied = true;
             lock (waitingLineLock)
             {
+                isStationOccupied = true;
                 base.CurrentPlane = plane;
+                ChangeInState?.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
                 Thread.Sleep(base.WaitingTime);
                 base.CurrentPlane = null;
             }
+
             isStationOccupied = false;
             ChangeInState?.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
 

@@ -54,7 +54,8 @@ namespace WpfNetCoreMvvm
             services.AddSingleton<DatabaseViewModel>();
             services.AddSingleton<VisualAirportViewModel>();
             services.AddSingleton<AirportViewModel>();
-
+            services.AddSingleton<StationViewModel>();
+            services.AddSingleton<PlaneViewModel>();
 
 
             // Register all the Windows of the applications.
@@ -63,6 +64,9 @@ namespace WpfNetCoreMvvm
             services.AddTransient<DatabaseView>();
             services.AddTransient<VisualAirportView>();
             services.AddTransient<AirportView>();
+            services.AddTransient<StationView>();
+            services.AddTransient<PlaneView>();
+
 
         }
 

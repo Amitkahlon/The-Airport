@@ -19,16 +19,22 @@ namespace Airport_Logic
         public EntryPointsManager EntryManager { get; private set; }
         public event LogicStationEvent ChangeInState;
         public string Name { get; private set; }
+        public string ImageUrl { get; set; }
 
         public Airport(Action<AirportBuilder> builder, string airportName)
         {
-            stationProvider = new StationProvider(this);
-            EntryManager = new EntryPointsManager();
+            this.stationProvider = new StationProvider(this);
+            this.EntryManager = new EntryPointsManager();
 
             AirportBuilder airportBuilder = new AirportBuilder(stationProvider, EntryManager);
             builder.Invoke(airportBuilder);
 
             this.Name = airportName;
+        }
+        public Airport(Action<AirportBuilder> builder, string airportName, string imageUrl) 
+            : this(builder, airportName)
+        {
+            this.ImageUrl = imageUrl;
         }
 
         public IEnumerable<Station> GetStations()
@@ -111,11 +117,14 @@ namespace Airport_Logic
                                 }
                             }
                         }
-                        //go to the next station
-                        stationNum++;
                     }
+                    //go to the next station
+                    stationNum++;
                 }
             }
+           
+            
+            //for debug
             public void AddDefualtStations()
             {
                 AddStation("Station1", TimeSpan.FromSeconds(15));

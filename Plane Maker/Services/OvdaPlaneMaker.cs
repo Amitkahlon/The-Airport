@@ -1,13 +1,16 @@
 ﻿using Airport_Common.Interfaces;
 using Airport_Common.Models;
 using Airport_Common.Routes;
+using Airport_Simulator;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
 using System.Timers;
 
-namespace Airport_Simulator
+namespace Plane_Maker.Services
 {
-    public class PlaneMaker : IPlaneMaker
+    public class OvdaPlaneMaker : IPlaneMaker
     {
         private readonly IPushPlane airPort;
         private Timer timer;
@@ -15,11 +18,12 @@ namespace Airport_Simulator
         private readonly string[] planeTypes = { "F-16 Fighting Falcon", "BOEING 787 DREAMLINER", "AIRBUS A350", "AIRBUS A380" };
         private readonly string[] countries = { "ISRAEL", "UNITED ARAB EMIRATES", "THAILAND", "UNITED STATES", "SPAIN", "ENGLAND" };
         private readonly Color[] colors = { Color.White, Color.Black, Color.Blue, Color.Yellow, Color.Green, Color.Red };
-        private readonly Route[] routes = { new LandingRoute(), new TakeOffRoute() };
+        private Route[] routes;
 
-        public PlaneMaker(IPushPlane plane)
+        public OvdaPlaneMaker(IPushPlane plane, params Route[] routes)
         {
             this.airPort = plane;
+            this.routes = routes;
         }
 
         public void ConfigureTimer(TimeSpan intervalTime)

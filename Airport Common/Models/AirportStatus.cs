@@ -8,6 +8,7 @@ namespace Airport_Common.Models
     {
         public IEnumerable<Station> Stations { get; set; }
         public string Name { get; set; }
+        public string ImageUrl{ get; set; }
 
         public AirportStatus() { }
 
@@ -15,6 +16,10 @@ namespace Airport_Common.Models
         {
             Stations = stations;
             this.Name = name;
+        }
+        public AirportStatus(IEnumerable<Station> stations, string name, string imageUrl) : this(stations,name)
+        {
+            this.ImageUrl = imageUrl;
         }
     }
 }

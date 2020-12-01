@@ -48,7 +48,12 @@ namespace WpfNetCoreMvvm.Services
         {
             connection.On<string>("ReceiveAirports", (jsonAirports) =>
             {
-                IEnumerable<AirportStatus> airports = JsonConvert.DeserializeObject<IEnumerable<AirportStatus>>(jsonAirports);
+                IEnumerable<AirportStatus> airports = JsonConvert.DeserializeObject<IEnumerable<AirportStatus>>(jsonAirports,
+                    new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                });
 
                 ReceiveAirports?.Invoke(this, airports);
             });

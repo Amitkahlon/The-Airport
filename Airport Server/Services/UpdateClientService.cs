@@ -1,4 +1,5 @@
 ﻿using Airport_Common.Models;
+using Airport_Logic;
 using Airport_Server.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
@@ -26,22 +27,33 @@ namespace Airport_Server.Services
 
         private async void ChangeInStateEventHandler(object sender, LogicStationChangedEventArgs args)
         {
-            string airportName = this.logicService.Airport.Name;
-            IEnumerable<Station> stations = this.logicService.Airport.GetStations();
+            IEnumerable<AirportStatus> airports = GetAirportList();
 
-            AirportStatus airportStatus = new AirportStatus(stations, airportName);
-
-            IEnumerable<AirportStatus> airports = new List<AirportStatus>()
+            string jsonAirports = JsonConvert.SerializeObject(airports, new JsonSerializerSettings()
             {
-                airportStatus,
-                airportStatus,
-                airportStatus,
-            };
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects
+            });
 
-            string jsonAirpots = JsonConvert.SerializeObject(airports);
+            await hubContext.Clients.All.SendAsync("ReceiveAirports", jsonAirports);
+        }
 
-            await hubContext.Clients.All.SendAsync("ReceiveAirports", jsonAirpots);
-          
+        private IEnumerable<AirportStatus> GetAirportList()
+        {
+            AirportStatus benGurion = CreateAirportStatus(this.logicService.BenGurionAirport);
+            AirportStatus ovda = CreateAirportStatus(this.logicService.OvdaAirport);
+
+            yield return benGurion;
+            yield return ovda;
+        }
+
+        private AirportStatus CreateAirportStatus(IAirport airport)
+        {
+            IEnumerable<Station> stations = airport.GetStations();
+            string airportName = airport.Name;
+            string imageUrl = airport.ImageUrl;
+
+            return new AirportStatus(stations, airportName, imageUrl);
         }
     }
 }

@@ -10,14 +10,14 @@ namespace Airport_Common.Routes
         {
             base.RouteArray = new int[][]
             {
-                new int[] { 1 }, //0
-                new int[] { 2 }, //1
-                new int[] { 3 }, //2
-                new int[] { 4, 5 }, //3
-                new int[] { }, //4
-                new int[] { 6 }, //5
-                new int[] { 7, 8 }, //6
-                new int[] {  }, //7
+                new int[] { 1,2 }, //0
+                new int[] { 3, 4 }, //1
+                new int[] { 3, 4 }, //2
+                new int[] { 5, 6, 7 }, //3
+                new int[] { 5, 6, 7 }, //4
+                new int[] { 8 }, //5
+                new int[] { 8 }, //6
+                new int[] { 8 }, //7
                 new int[] { 0 }, //8
             };
 

@@ -7,6 +7,7 @@ namespace Airport_Logic
     public interface IAirport
     {
         string Name { get; }
+        string ImageUrl { get; }
         IEnumerable<Station> GetStations();
         event LogicStationEvent ChangeInState;
     }

@@ -26,7 +26,7 @@ namespace AirportClient.ViewModels
 
         private void GoBack()
         {
-            this.navigationService.ChangeContent(new StationView());
+            this.navigationService.Navigate(new StationView());
         }
 
         public void SetProperties(Plane plane, Station station, AirportStatus airport)

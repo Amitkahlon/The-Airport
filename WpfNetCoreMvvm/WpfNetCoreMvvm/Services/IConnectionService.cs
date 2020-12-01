@@ -9,5 +9,7 @@ namespace WpfNetCoreMvvm.Services
     public interface IConnectionService
     {
         event EventHandler<IEnumerable<AirportStatus>> ReceiveAirports;
+        event EventHandler<string> ErrorOccured;
+        void Connect();
     }
 }

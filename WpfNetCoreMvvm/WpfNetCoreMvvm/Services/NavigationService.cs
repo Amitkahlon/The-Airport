@@ -22,7 +22,7 @@ namespace ChatClient.Services
             }
         }
 
-        public void ChangeContent(UserControl userControl)
+        public void Navigate(UserControl userControl)
         {
             Content = userControl;
         }

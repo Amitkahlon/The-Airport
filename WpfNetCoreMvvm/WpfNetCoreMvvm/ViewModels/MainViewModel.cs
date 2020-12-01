@@ -62,17 +62,17 @@ namespace WpfNetCoreMvvm.ViewModels
 
         private void DatabaseNav()
         {
-            this.navigationService.ChangeContent(Views["Database"]);
+            this.navigationService.Navigate(Views["Database"]);
         }
 
         private void VisualAirport()
         {
-            this.navigationService.ChangeContent(Views["VisualAirport"]);
+            this.navigationService.Navigate(Views["VisualAirport"]);
         }
 
         private void HomeNav()
         {
-            this.navigationService.ChangeContent(Views["Home"]);
+            this.navigationService.Navigate(Views["Home"]);
         }
     }
 }

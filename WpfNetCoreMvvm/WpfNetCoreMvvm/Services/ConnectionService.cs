@@ -1,27 +1,35 @@
 ﻿using Airport_Common.Models;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using WpfNetCoreMvvm.Models;
 
 namespace WpfNetCoreMvvm.Services
 {
     public class ConnectionService : IConnectionService
     {
         private HubConnection connection;
+        private readonly IOptions<AppSettings> settings;
+
         public event EventHandler<IEnumerable<AirportStatus>> ReceiveAirports;
-        public ConnectionService()
+        public event EventHandler<string> ErrorOccured;
+
+        public ConnectionService(IOptions<AppSettings> settings)
         {
+            this.settings = settings;
             InitialConnection();
             Connect();
         }
 
         private void InitialConnection()
         {
+            string hubUrl = this.settings.Value.HubUrl;
             connection = new HubConnectionBuilder()
-               .WithUrl("https://localhost:44313/airport")
+               .WithUrl(hubUrl)
                .Build();
 
             connection.Closed += async (error) =>
@@ -31,16 +39,16 @@ namespace WpfNetCoreMvvm.Services
             };
         }
 
-        private async void Connect()
+        public async void Connect()
         {
             SetSingalRFuncs();
             try
             {
                 await connection.StartAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //todo: show error message
+                ErrorOccured(this, ex.Message);
             }
         }
 
@@ -50,14 +58,13 @@ namespace WpfNetCoreMvvm.Services
             {
                 IEnumerable<AirportStatus> airports = JsonConvert.DeserializeObject<IEnumerable<AirportStatus>>(jsonAirports,
                     new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
-                    PreserveReferencesHandling = PreserveReferencesHandling.Objects
-                });
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                    });
 
                 ReceiveAirports?.Invoke(this, airports);
             });
         }
-
     }
 }

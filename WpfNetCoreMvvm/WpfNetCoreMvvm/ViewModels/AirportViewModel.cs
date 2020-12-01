@@ -30,7 +30,7 @@ namespace ChatClient.ViewModels
         private void View(Station station)
         {
             stationViewModel.SetProperties(station, Airport);
-            navigationService.ChangeContent(new StationView());
+            navigationService.Navigate(new StationView());
         }
     }
 }

@@ -2,10 +2,9 @@
 {
     public class AppSettings
     {
-        public string StringSetting { get; set; }
+        public string BaseUrl { get; set; }
+        public string HubRoute { get; set; }
 
-        public int IntegerSetting { get; set; }
-
-        public bool BooleanSetting { get; set; }
+        public string HubUrl { get => $"{BaseUrl}{HubRoute}"; }
     }
 }

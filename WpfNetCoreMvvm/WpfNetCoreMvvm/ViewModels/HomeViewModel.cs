@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using WpfNetCoreMvvm.Services;
 
 namespace AirportClient.ViewModels
@@ -29,14 +32,35 @@ namespace AirportClient.ViewModels
         {
             this.service = service;
             this.NavigationService = navigationService;
-            AirportViewModel = airportViewModel;
+            this.AirportViewModel = airportViewModel;
+            
+            //assign events
             this.service.ReceiveAirports += ReceiveAirportsEventHandler;
+            this.service.ErrorOccured += ErrorOccuredEventHandler;
+            
+            //assign commands.
             this.ViewDetailsCommand = new RelayCommand<AirportStatus>(airport => ViewDetails(airport));
+        }
+
+        private void ErrorOccuredEventHandler(object sender, string error)
+        {
+            MessageBox.Show(error, $"Error Occured When Tried To Connect To Server!");
+
+            RetryConnection();
+        }
+
+        private void RetryConnection()
+        {
+            Task.Run(() =>
+            {
+                Thread.Sleep(3000);
+                this.service.Connect();
+            });
         }
 
         private void ViewDetails(AirportStatus selectedAirport)
         {
-            NavigationService.ChangeContent(new AirportView());
+            NavigationService.Navigate(new AirportView());
             AirportViewModel.Airport = selectedAirport;
         }
 

@@ -30,13 +30,13 @@ namespace AirportClient.ViewModels
 
         private void GoBack()
         {
-            this.navigationService.ChangeContent(new AirportView());
+            this.navigationService.Navigate(new AirportView());
         }
 
         private void ViewPlane(Plane plane)
         {
             this.planeViewModel.SetProperties(plane, Station, Airport);
-            this.navigationService.ChangeContent(new PlaneView());
+            this.navigationService.Navigate(new PlaneView());
         }
 
         public void SetProperties(Station station, AirportStatus airport)

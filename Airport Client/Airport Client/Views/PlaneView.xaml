@@ -11,7 +11,11 @@
         <ScrollViewer>
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button Content="Go Back To Station" Command="{Binding GoBackCommand}" />
-                <TextBlock Text="{Binding Plane.FlightNumber}" FontSize="40" Margin="0,0,0,50" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding Plane.FlightNumber}" FontSize="50" Margin="0,0,0,41" HorizontalAlignment="Center">
+                    <TextBlock.TextDecorations>
+                        <TextDecoration/>
+                    </TextBlock.TextDecorations>
+                </TextBlock>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Number: "/>
                     <Label Content="{Binding Plane.FlightNumber}"/>

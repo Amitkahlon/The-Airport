@@ -11,7 +11,7 @@ namespace Airport_Logic.Logic_Models
 {
     public class LogicStation : Station, IEnterStation, IWaitingLine
     {
-        //To avoid serializing any property from the logic project, should only serialize properties from common.
+        //Using JsonIgnore to avoid serializing any property from the logic project, should only serialize properties from common station class.
         [JsonIgnore]
         public ConcurrentQueue<Plane> WaitingLine { get; private set; }
         internal event LogicStationEvent ChangeInState;

@@ -24,6 +24,7 @@ namespace AirportClient.ViewModels
         public AirportViewModel AirportViewModel { get; }
 
         private ObservableCollection<AirportStatus> airports;
+
         public ObservableCollection<AirportStatus> Airports { get => airports; set { Set(ref airports, value); } }
         public RelayCommand<AirportStatus> ViewDetailsCommand { get; }
 
@@ -33,11 +34,11 @@ namespace AirportClient.ViewModels
             this.service = service;
             this.NavigationService = navigationService;
             this.AirportViewModel = airportViewModel;
-            
+
             //assign events
             this.service.ReceiveAirports += ReceiveAirportsEventHandler;
             this.service.ErrorOccured += ErrorOccuredEventHandler;
-            
+
             //assign commands.
             this.ViewDetailsCommand = new RelayCommand<AirportStatus>(airport => ViewDetails(airport));
         }
@@ -67,7 +68,7 @@ namespace AirportClient.ViewModels
         private void ReceiveAirportsEventHandler(object sender, IEnumerable<AirportStatus> AirportsArgs)
         {
             Airports = new ObservableCollection<AirportStatus>(AirportsArgs);
-            if(this.AirportViewModel.Airport != null)
+            if (this.AirportViewModel.Airport != null)
             {
                 this.AirportViewModel.Airport = AirportsArgs.FirstOrDefault(airport => airport.Name == this.AirportViewModel.Airport.Name);
             }

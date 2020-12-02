@@ -51,14 +51,7 @@ namespace Airport_Logic.Services
             {
                 throw new ArgumentException("station Number cannot be 0");
             }
-            try
-            {
-                return stations.First(s => s.StationNumber == stationNum);
-            }
-            catch (Exception)
-            {
-                throw new ArgumentException("Station does not exist");
-            }
+            return stations.First(s => s.StationNumber == stationNum);
         }
 
         public IEnumerable<LogicStation> GetStations()

@@ -1,4 +1,4 @@
-﻿using Airport_Common.Models;
+using Airport_Common.Models;
 using Airport_DAL.Context;
 using Airport_DAL.DatabaseModels;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +14,7 @@ namespace Airport_DAL.Services
     {
         private readonly object key = new object();
         public DataContext Context { get; set; }
-        private readonly DataServiceHelper DataHelper;
+        private DataServiceHelper DataHelper;
 
         public AirportDataService()
         {
@@ -24,17 +24,13 @@ namespace Airport_DAL.Services
 
         public async Task AddAirport(DbAirport airport)
         {
-            airport.Stations.OrderBy(s => s.StationNumber);
             Context.Airports.Add(airport);
             await Context.SaveChangesAsync();
         }
 
         public IEnumerable<DbAirport> GetAirports()
         {
-            //returns the full airport, with all the stations and routes and planes.
-            return this.Context.Airports.Include(a => a.Routes)
-                .Include(a => a.Stations.OrderBy(s => s.StationNumber)).ThenInclude(s => s.CurrentPlane).ThenInclude(p => p.Route)
-                .Include(a => a.Stations.OrderBy(s => s.StationNumber)).ThenInclude(s => s.WaitingLine).ThenInclude(p => p.Route);
+            return this.Context.Airports.Include(a => a.Routes).Include(a => a.Stations);
         }
 
         public void UpdateStation(DbStation stationDetails)
@@ -45,7 +41,7 @@ namespace Airport_DAL.Services
                 lock (key)
                 {
                     DbStation foundStation = GetStation(stationDetails.Id);
-                    Context.Entry(foundStation).Property(s => s.WaitingTime).CurrentValue = stationDetails.WaitingTime;
+                    foundStation.WaitingTime = stationDetails.WaitingTime;
 
                     ICollection<DbPlane> dbWaitingLine = new List<DbPlane>();
                     foreach (var plane in stationDetails.WaitingLine)
@@ -57,20 +53,14 @@ namespace Airport_DAL.Services
                     DbPlane foundPlane = null;
                     if (stationDetails.CurrentPlane != null)
                     {
-                        foundPlane = this.DataHelper.GetOrCreatePlane(stationDetails.CurrentPlane);
+                        this.DataHelper.GetOrCreatePlane(stationDetails.CurrentPlane);
                     }
 
-                    Context.Entry(foundStation).Collection(s => s.WaitingLine).CurrentValue = dbWaitingLine;
-                    Context.Entry(foundStation).Reference(s => s.CurrentPlane).CurrentValue = foundPlane;
-
+                    foundStation.WaitingLine = dbWaitingLine;
+                    foundStation.CurrentPlane = foundPlane;
                     Context.SaveChanges();
                 }
             });
-        }
-
-        public int GetIdCount()
-        {
-            return this.Context.Planes.Count();
         }
 
         public async void AddPlane(DbPlane plane)

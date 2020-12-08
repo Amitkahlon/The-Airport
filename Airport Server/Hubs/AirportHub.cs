@@ -14,6 +14,17 @@ namespace Airport_Server.Hubs
 {
     public class AirportHub : Hub
     {
+        private readonly UpdateClientService updateClientService;
 
+        public AirportHub(UpdateClientService updateClientService)
+        {
+            this.updateClientService = updateClientService;
+        }
+
+        public override Task OnConnectedAsync()
+        {
+            this.updateClientService.ChangeInStateEventHandler(null, null);
+            return base.OnConnectedAsync();
+        }
     }
 }

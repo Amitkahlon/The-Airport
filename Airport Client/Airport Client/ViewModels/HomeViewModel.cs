@@ -26,6 +26,9 @@ namespace AirportClient.ViewModels
         private ObservableCollection<AirportStatus> airports;
 
         public ObservableCollection<AirportStatus> Airports { get => airports; set { Set(ref airports, value); } }
+        private Visibility loadingVisability;
+
+        public Visibility LoadingVisability { get => loadingVisability; set => Set(ref loadingVisability, value); }
         public RelayCommand<AirportStatus> ViewDetailsCommand { get; }
 
 
@@ -41,11 +44,17 @@ namespace AirportClient.ViewModels
 
             //assign commands.
             this.ViewDetailsCommand = new RelayCommand<AirportStatus>(airport => ViewDetails(airport));
+
+            this.LoadingVisability = Visibility.Visible;
         }
 
         private void ErrorOccuredEventHandler(object sender, string error)
         {
             MessageBox.Show(error, $"Error Occured When Tried To Connect To Server!");
+            if (this.LoadingVisability != Visibility.Collapsed)
+            {
+                this.LoadingVisability = Visibility.Visible;
+            }
 
             RetryConnection();
         }
@@ -54,7 +63,7 @@ namespace AirportClient.ViewModels
         {
             Task.Run(() =>
             {
-                Thread.Sleep(3000);
+                Thread.Sleep(100);
                 this.service.Connect();
             });
         }
@@ -67,6 +76,11 @@ namespace AirportClient.ViewModels
 
         private void ReceiveAirportsEventHandler(object sender, IEnumerable<AirportStatus> AirportsArgs)
         {
+            if(this.LoadingVisability != Visibility.Collapsed)
+            {
+                this.LoadingVisability = Visibility.Collapsed;
+            }
+
             Airports = new ObservableCollection<AirportStatus>(AirportsArgs);
             if (this.AirportViewModel.Airport != null)
             {

@@ -6,12 +6,13 @@ using System.Text;
 
 namespace Airport_DAL.DatabaseModels
 {
-    public class PlaneLog
+    public class DbAirport
     {
         [Key]
         public int Id{ get; set; }
-        public DbPlane PlaneId { get; set; }
-        public DbStation StationId { get; set; }
-        public DateTime Time { get; set; }
+        public string Name { get; set; }
+        public string ImageUrl { get; set; }
+        public ICollection<DbRoute> Routes { get; set; }
+        public ICollection<DbStation> Stations{ get; set; }
     }
 }

@@ -15,26 +15,39 @@ namespace Airport_Logic
 {
     public class Airport : IPushPlane, IRaiseChangeInStateEvent, IAirport
     {
+        public int Id { get; set; }
         private readonly IStationProvider stationProvider;
         public EntryPointsManager EntryManager { get; private set; }
         public event LogicStationEvent ChangeInState;
+        public List<Route> Routes { get; set; }
         public string Name { get; private set; }
         public string ImageUrl { get; set; }
 
         public Airport(Action<AirportBuilder> builder, string airportName)
         {
+            this.Name = airportName;
             this.stationProvider = new StationProvider(this);
             this.EntryManager = new EntryPointsManager();
+            this.Routes = new List<Route>();
 
-            AirportBuilder airportBuilder = new AirportBuilder(stationProvider, EntryManager);
+            AirportBuilder airportBuilder = new AirportBuilder(stationProvider, EntryManager, this);
             builder.Invoke(airportBuilder);
 
-            this.Name = airportName;
         }
-        public Airport(Action<AirportBuilder> builder, string airportName, string imageUrl) 
+        public Airport(Action<AirportBuilder> builder, string airportName, string imageUrl)
             : this(builder, airportName)
         {
             this.ImageUrl = imageUrl;
+        }
+
+        public static Airport RestoreAirport(AirportStatus airport)
+        {
+            Airport restoredPort = new Airport((builder) =>
+            {
+                builder.RestoreAirport(airport.Stations, airport.Routes);
+            }, airport.Name, airport.ImageUrl);
+
+            return restoredPort;
         }
 
         public IEnumerable<Station> GetStations()
@@ -46,7 +59,7 @@ namespace Airport_Logic
         {
             Task.Run(() =>
             {
-                LogicStation.GetBestStation(EntryManager.GetEntryStations(plane.PlaneRoute.Name)).EnterStation(plane);
+                LogicStation.GetBestStation(EntryManager.GetEntryStations(plane.Route.Name)).EnterStation(plane);
             });
         }
 
@@ -59,17 +72,23 @@ namespace Airport_Logic
         {
             private readonly IStationProvider stationService;
             private readonly EntryPointsManager entryManager;
-            internal AirportBuilder(IStationProvider stationService, EntryPointsManager entryPoints)
+            private readonly Airport airport;
+
+            internal AirportBuilder(IStationProvider stationService, EntryPointsManager entryPoints, Airport airport)
             {
                 this.stationService = stationService;
                 this.entryManager = entryPoints;
+                this.airport = airport;
             }
             public void AddStation(string stationName, TimeSpan waitingTime)
             {
                 stationService.CreateStation(stationName, waitingTime);
             }
-            public void AddRoute(IRoute route)
+            public void AddRoute(Route route)
             {
+                //Add to route list
+                this.airport.Routes.Add(route);
+
                 entryManager.InitializeEntryPoint(route.Name);
 
                 int stationNum = 0; //0 == entry point
@@ -122,8 +141,19 @@ namespace Airport_Logic
                     stationNum++;
                 }
             }
-           
-            
+            private void RestoreStations(IEnumerable<Station> stations)
+            {
+                stationService.RestoreStations(stations.ToList());
+            }
+            private void RestoreRoutes(List<Route> routes)
+            {
+                foreach (var route in routes)
+                {
+                    AddRoute(route);
+                }
+            }
+
+
             //for debug
             public void AddDefualtStations()
             {
@@ -139,6 +169,18 @@ namespace Airport_Logic
             public void AddDefualtRoute()
             {
                 AddRoute(new LandingRoute());
+            }
+
+            internal void RestoreAirport(IEnumerable<Station> stations, List<Route> routes)
+            {
+                this.RestoreStations(stations);
+                this.RestoreRoutes(routes);
+                this.RestorePlanes(stations);
+            }
+
+            private void RestorePlanes(IEnumerable<Station> stations)
+            {
+                this.stationService.RestorePlanes(stations);
             }
         }
     }

@@ -6,13 +6,19 @@ using System.Text;
 
 namespace Airport_DAL.DatabaseModels
 {
-    public class Station
+    public class DbStation
     {
         [Key]
         public int Id{ get; set; }
-        public Airport Airport { get; set; }
+        [Required]
         public int StationNumber{ get; set; }
         public string StationName { get; set; }
+        public DbPlane CurrentPlane { get; set; }
+        public ICollection<DbPlane> WaitingLine { get; set; }
+        //public IEnumerable<DbStation> ConnectedStations { get; set; }
         public TimeSpan WaitingTime { get; set; }
+        
+
+        public DbAirport Airport { get; set; }
     }
 }

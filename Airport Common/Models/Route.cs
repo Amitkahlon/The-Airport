@@ -8,6 +8,7 @@ namespace Airport_Common.Models
 {
     public class Route : IRoute
     {
+        public int Id { get; set; }
         public int[][] RouteArray { get; set; }
         public int RouteLength => RouteArray.Length - 1;
 

@@ -1,4 +1,5 @@
-﻿using Airport_Logic.Logic_Models;
+﻿using Airport_Common.Models;
+using Airport_Logic.Logic_Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,5 +12,7 @@ namespace Airport_Logic.Interfaces
         void CreateStation(string stationName, TimeSpan timeSpan);
         LogicStation GetStation(int stationNum);
         IEnumerable<LogicStation> GetStations();
+        void RestoreStations(List<Station> stations);
+        void RestorePlanes(IEnumerable<Station> stations);
     }
 }

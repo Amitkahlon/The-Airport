@@ -1,4 +1,6 @@
+using Airport_DAL.Context;
 using Airport_DAL.Services;
+using Airport_Server.Converter;
 using Airport_Server.Hubs;
 using Airport_Server.Services;
 using Microsoft.AspNetCore.Builder;
@@ -22,11 +24,27 @@ namespace Airport_Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //todo: add interfaces.
+            //todo: fix given id in plane maker
+
             services.AddControllers();
+
+            services.AddSingleton(x =>
+            {
+                return new LogicService
+                (
+                    x.GetRequiredService<AirportDataService>(),
+                    x.GetRequiredService<ConverterProvider>(),
+                    createAirports: false
+                );
+            });
+
+
             services.AddSingleton<AirportDataService>();
-            services.AddSingleton<LogicService>();
-            services.AddSignalR();
+            services.AddSingleton<ConverterProvider>();
             services.AddSingleton<UpdateClientService>();
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -67,7 +67,7 @@ namespace Airport_Test
 
             var plane = new Plane()
             {
-                PlaneRoute = new MockRoute()
+                Route = new MockRoute()
             };
 
             //Act
@@ -94,13 +94,13 @@ namespace Airport_Test
 
             var plane1 = new Plane()
             {
-                PlaneRoute = new MockRoute(),
+                Route = new MockRoute(),
                 FlightNumber = "0"
             };
 
             var plane2 = new Plane()
             {
-                PlaneRoute = new MockRoute(),
+                Route = new MockRoute(),
                 FlightNumber = "1"
             };
 

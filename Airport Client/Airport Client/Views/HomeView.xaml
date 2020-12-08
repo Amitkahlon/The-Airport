@@ -73,5 +73,9 @@
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
         </ListView>
+
+        
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Trying To Connect To Server..." FontSize="30" Visibility="{Binding LoadingVisability}"></TextBlock>
+        
     </Grid>
 </UserControl>

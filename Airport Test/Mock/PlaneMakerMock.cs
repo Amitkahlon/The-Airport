@@ -44,7 +44,7 @@ namespace Airport_Test.Mock
                 Color = Color.White,
                 Country = "israel",
                 PassangersCount = 100,
-                PlaneRoute = new LandingRoute(),
+                Route = new LandingRoute(),
                 FlightNumber = id.ToString()
             });
 
@@ -59,7 +59,7 @@ namespace Airport_Test.Mock
                 Color = Color.White,
                 Country = "israel",
                 PassangersCount = 100,
-                PlaneRoute = route,
+                Route = route,
                 FlightNumber = id.ToString()
             });
             id++;

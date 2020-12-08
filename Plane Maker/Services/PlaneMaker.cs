@@ -1,6 +1,7 @@
 ﻿using Airport_Common.Interfaces;
 using Airport_Common.Models;
 using Airport_Common.Routes;
+using Plane_Maker.Services;
 using System;
 using System.Drawing;
 using System.Timers;
@@ -11,9 +12,9 @@ namespace Airport_Simulator
     {
         private readonly IPushPlane airPort;
         private Timer timer;
-        private int id;
         private readonly string[] planeTypes = { "F-16 Fighting Falcon", "BOEING 787 DREAMLINER", "AIRBUS A350", "AIRBUS A380" };
-        private readonly string[] countries = { "ISRAEL", "UNITED ARAB EMIRATES", "THAILAND", "UNITED STATES", "SPAIN", "ENGLAND" };
+        //private readonly string[] countries = { "ISRAEL", "UNITED ARAB EMIRATES", "THAILAND", "UNITED STATES", "SPAIN", "ENGLAND" };
+        private readonly string[] countries = { "BEN" };
         private readonly Color[] colors = { Color.White, Color.Black, Color.Blue, Color.Yellow, Color.Green, Color.Red };
         private readonly Route[] routes = { new LandingRoute(), new TakeOffRoute() };
 
@@ -66,12 +67,12 @@ namespace Airport_Simulator
                 AirplaneType = planeType,
                 Country = county,
                 Color = color,
-                PlaneRoute = planeRoute,
-                FlightNumber = $"{county.Substring(0, 3)} {id}",
+                Route = planeRoute,
+                FlightNumber = $"{county.Substring(0, 3)} {IdManager.Id}",
                 PassangersCount = participantes
             };
 
-            id++;
+            IdManager.Id++;
 
             airPort.PushPlane(newPlane);
         }
@@ -91,7 +92,7 @@ namespace Airport_Simulator
                 AirplaneType = planeType,
                 Country = county,
                 Color = color,
-                PlaneRoute = planeRoute,
+                Route = planeRoute,
                 FlightNumber = "Test 775",
                 PassangersCount = participantes
             };

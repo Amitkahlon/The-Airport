@@ -11,9 +11,7 @@ namespace Airport_Logic.Logic_Models
 {
     public class LogicStation : Station, IEnterStation, IWaitingLine
     {
-        //Using JsonIgnore to avoid serializing any property from the logic project, should only serialize properties from common station class.
-        [JsonIgnore]
-        public ConcurrentQueue<Plane> WaitingLine { get; private set; }
+
         internal event LogicStationEvent ChangeInState;
         private bool isStationOccupied;
         private readonly object waitingLineLock = new object();
@@ -45,9 +43,17 @@ namespace Airport_Logic.Logic_Models
             });
         }
 
+        public void EnterStationRestore(Plane plane)
+        {
+            Task.Run(() =>
+            {
+                Wait(plane);
+            });
+        }
+
         public void EnterStation(Plane plane)
         {
-            if (IsWaitinglineEmpty && !isStationOccupied)
+            if (IsWaitinglineEmpty && !isStationOccupied) 
             {
                 Task.Run(() =>
                 {
@@ -94,11 +100,11 @@ namespace Airport_Logic.Logic_Models
         /// <returns>least busy station for the plane</returns>
         private LogicStation GetBestStation(IRouteable plane)
         {
-            var nextStationNumbers = plane.PlaneRoute.GetNextAvailableRoute(this.StationNumber);
+            var nextStationNumbers = plane.Route.GetNextAvailableRoute(this.StationNumber);
 
             if (!nextStationNumbers.Any())
             {
-                throw new Exception("Could not be empty, if we reach the end we receive -1");
+                throw new Exception("Could not be empty, if we reach the end we receive 0");
             }
             else if (nextStationNumbers.Any(staionNum => staionNum == 0)) //if it reached the end
             {

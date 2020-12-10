@@ -64,7 +64,7 @@ namespace Airport_Server.Services
             foreach (var commonStation in commonStations)
             {
                 yield return ConvertStation(commonStation);
-            
+
             }
         }
 
@@ -79,6 +79,14 @@ namespace Airport_Server.Services
                 CurrentPlane = ConvertPlane(commonStation.CurrentPlane),
                 WaitingLine = new List<DbPlane>(ConvertPlanes(commonStation.WaitingLine)),
             };
+        }
+
+        internal IEnumerable<CommonPlaneLog> ConvertPlaneLogs(IEnumerable<PlaneLog> logs)
+        {
+            foreach (var log in logs)
+            {
+                yield return ConvertPlaneLog(log);
+            }
         }
 
         private Station ConvertStation(DbStation station)
@@ -102,7 +110,7 @@ namespace Airport_Server.Services
 
         public DbPlane ConvertPlane(Plane plane)
         {
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
@@ -121,7 +129,7 @@ namespace Airport_Server.Services
 
         public Plane ConvertPlane(DbPlane dbPlane)
         {
-            if(dbPlane != null)
+            if (dbPlane != null)
             {
                 return new Plane()
                 {
@@ -134,7 +142,7 @@ namespace Airport_Server.Services
                     Route = ConvertRoute(dbPlane.Route),
                 };
             }
-           else
+            else
             {
                 return null;
             }
@@ -150,7 +158,7 @@ namespace Airport_Server.Services
 
         public IEnumerable<Plane> ConvertPlanes(IEnumerable<DbPlane> dbPlanes)
         {
-            
+
             foreach (var dbplane in dbPlanes)
             {
                 yield return ConvertPlane(dbplane);
@@ -161,7 +169,7 @@ namespace Airport_Server.Services
         {
             List<DbRoute> dbRoutes = new List<DbRoute>();
 
-            if(routes != null)
+            if (routes != null)
             {
                 foreach (var route in routes)
                 {
@@ -199,18 +207,55 @@ namespace Airport_Server.Services
         }
         private Route ConvertRoute(DbRoute dbRoute)
         {
-            int[][] routeArr = new int[dbRoute.RouteArray.Count][];
-
-            for (int i = 0; i < dbRoute.RouteArray.Count; i++)
+            if (dbRoute != null)
             {
-                routeArr[i] = dbRoute.RouteArray[i].ToArray();
+                int[][] routeArr = new int[dbRoute.RouteArray.Count][];
+
+                for (int i = 0; i < dbRoute.RouteArray.Count; i++)
+                {
+                    routeArr[i] = dbRoute.RouteArray[i].ToArray();
+                }
+
+                return new Route()
+                {
+                    //Id = dbRoute.Id,
+                    Name = dbRoute.Name,
+                    RouteArray = routeArr
+                };
+            }
+            else
+            {
+                return null;
             }
 
-            return new Route()
+        }
+
+        public PlaneLog ConvertPlaneLog(CommonPlaneLog commonPlaneLog)
+        {
+            return new PlaneLog()
             {
-                //Id = dbRoute.Id,
-                Name = dbRoute.Name,
-                RouteArray = routeArr
+                Id = commonPlaneLog.Id,
+                Plane = ConvertPlane(commonPlaneLog.Plane),
+                Station = ConvertStation(commonPlaneLog.Station),
+                PlaneAction = commonPlaneLog.PlaneAction,
+                Time = commonPlaneLog.Time
+            };
+        }
+
+        public CommonPlaneLog ConvertPlaneLog(PlaneLog PlaneLog)
+        {
+            Station station = null;
+            if (PlaneLog.Station != null)
+            {
+                station = ConvertStation(PlaneLog.Station);
+            }
+            return new CommonPlaneLog()
+            {
+                Id = PlaneLog.Id,
+                Plane = ConvertPlane(PlaneLog.Plane),
+                Station = station,
+                PlaneAction = PlaneLog.PlaneAction,
+                Time = PlaneLog.Time
             };
         }
     }

@@ -22,6 +22,8 @@ namespace AirportClient.ViewModels
 
         public NavigationService NavigationService { get; private set; }
         public AirportViewModel AirportViewModel { get; }
+        public StationViewModel StationViewModel{ get; }
+        public PlaneViewModel PlaneViewModel { get; }
 
         private ObservableCollection<AirportStatus> airports;
 
@@ -32,11 +34,13 @@ namespace AirportClient.ViewModels
         public RelayCommand<AirportStatus> ViewDetailsCommand { get; }
 
 
-        public HomeViewModel(IConnectionService service, NavigationService navigationService, AirportViewModel airportViewModel)
+        public HomeViewModel(IConnectionService connectionService, NavigationService navigationService, AirportViewModel airportViewModel, StationViewModel stationViewModel, PlaneViewModel planeViewModel)
         {
-            this.service = service;
+            this.service = connectionService;
             this.NavigationService = navigationService;
             this.AirportViewModel = airportViewModel;
+            this.StationViewModel = stationViewModel;
+            this.PlaneViewModel = planeViewModel;
 
             //assign events
             this.service.ReceiveAirports += ReceiveAirportsEventHandler;
@@ -82,10 +86,34 @@ namespace AirportClient.ViewModels
             }
 
             Airports = new ObservableCollection<AirportStatus>(AirportsArgs);
+
+            AirportStatus airport = null;
+            Station station = null;
+
             if (this.AirportViewModel.Airport != null)
             {
-                this.AirportViewModel.Airport = AirportsArgs.FirstOrDefault(airport => airport.Name == this.AirportViewModel.Airport.Name);
+                airport = AirportsArgs.FirstOrDefault(airport => airport.Name == this.AirportViewModel.Airport.Name);
+                this.AirportViewModel.Airport = airport;
             }
+
+            if (this.StationViewModel.Station != null)
+            {
+                station = this.AirportViewModel.Airport.Stations
+                   .FirstOrDefault(station => station.StationNumber == this.StationViewModel.Station.StationNumber);
+
+                this.StationViewModel.Station = station;
+                this.StationViewModel.Airport = airport;
+
+            }
+
+            //update Plane
+            //if(this.PlaneViewModel.Plane != null)
+            //{
+            //    //find the plane and station to update the ui
+            //    Station planeStation = airport.Stations.FirstOrDefault(s => s.CurrentPlane?.FlightNumber == this.PlaneViewModel.Plane.FlightNumber);
+            //    this.PlaneViewModel.Plane = planeStation.CurrentPlane;
+            //    this.PlaneViewModel.Station = planeStation;
+            //};
         }
     }
 }

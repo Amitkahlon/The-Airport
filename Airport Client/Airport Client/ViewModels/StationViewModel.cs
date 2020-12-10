@@ -14,9 +14,9 @@ namespace AirportClient.ViewModels
     {
         private readonly NavigationService navigationService;
         private readonly PlaneViewModel planeViewModel;
-
-        public Station Station { get; set; }
-        public AirportStatus Airport{ get; set; }
+        private Station station;
+        public Station Station { get => station; set => Set(ref station, value); }
+        public AirportStatus Airport { get; set; }
         public RelayCommand<Plane> ViewPlaneCommand { get; set; }
         public RelayCommand GoBackCommand { get; set; }
 

@@ -33,5 +33,10 @@ namespace Airport_Common.Models
                 ConnectedStations.Add(station);
             }
         }
+
+        public override string ToString()
+        {
+            return $"{this.StationNumber}, {this.StationName}";
+        }
     }
 }

@@ -13,8 +13,7 @@ namespace Airport_Simulator
         private readonly IPushPlane airPort;
         private Timer timer;
         private readonly string[] planeTypes = { "F-16 Fighting Falcon", "BOEING 787 DREAMLINER", "AIRBUS A350", "AIRBUS A380" };
-        //private readonly string[] countries = { "ISRAEL", "UNITED ARAB EMIRATES", "THAILAND", "UNITED STATES", "SPAIN", "ENGLAND" };
-        private readonly string[] countries = { "BEN" };
+        private readonly string[] countries = { "ISRAEL", "UNITED ARAB EMIRATES", "THAILAND", "UNITED STATES", "SPAIN", "ENGLAND" };
         private readonly Color[] colors = { Color.White, Color.Black, Color.Blue, Color.Yellow, Color.Green, Color.Red };
         private readonly Route[] routes = { new LandingRoute(), new TakeOffRoute() };
 

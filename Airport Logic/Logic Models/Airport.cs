@@ -1,4 +1,5 @@
-﻿using Airport_Common.Interfaces;
+﻿using Airport_Common.Args;
+using Airport_Common.Interfaces;
 using Airport_Common.Models;
 using Airport_Common.Routes;
 using Airport_Logic.Interfaces;
@@ -18,7 +19,7 @@ namespace Airport_Logic
         public int Id { get; set; }
         private readonly IStationProvider stationProvider;
         public EntryPointsManager EntryManager { get; private set; }
-        public event LogicStationEvent ChangeInState;
+        public event StationEvent ChangeInState;
         public List<Route> Routes { get; set; }
         public string Name { get; private set; }
         public string ImageUrl { get; set; }
@@ -63,7 +64,7 @@ namespace Airport_Logic
             });
         }
 
-        public void RaiseChangeInStateEvent(object sender, LogicStationChangedEventArgs args)
+        public void RaiseChangeInStateEvent(object sender, StationChangedEventArgs args)
         {
             this.ChangeInState?.Invoke(sender, args);
         }

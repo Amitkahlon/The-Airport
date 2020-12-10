@@ -34,7 +34,7 @@ namespace Airport_DAL.Context
         public DbSet<DbAirport> Airports { get; set; }
         public DbSet<DbStation> Stations { get; set; }
         public DbSet<DbPlane> Planes { get; set; }
-        //public DbSet<PlaneLog> PlanesLog { get; set; }
+        public DbSet<PlaneLog> PlanesLog { get; set; }
 
     }
 }

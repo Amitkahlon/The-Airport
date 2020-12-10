@@ -1,4 +1,5 @@
-﻿using Airport_Common.Models;
+﻿using Airport_Common.Args;
+using Airport_Common.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
@@ -12,7 +13,7 @@ namespace Airport_Logic.Logic_Models
     public class LogicStation : Station, IEnterStation, IWaitingLine
     {
 
-        internal event LogicStationEvent ChangeInState;
+        internal event StationEvent ChangeInState;
         private bool isStationOccupied;
         private readonly object waitingLineLock = new object();
 
@@ -30,7 +31,7 @@ namespace Airport_Logic.Logic_Models
             }
         }
 
-        private void PushToWait(object sender, LogicStationChangedEventArgs args)
+        private void PushToWait(object sender, StationChangedEventArgs args)
         {
             Task.Run(() =>
             {
@@ -53,7 +54,7 @@ namespace Airport_Logic.Logic_Models
 
         public void EnterStation(Plane plane)
         {
-            if (IsWaitinglineEmpty && !isStationOccupied) 
+            if (IsWaitinglineEmpty && !isStationOccupied)
             {
                 Task.Run(() =>
                 {
@@ -63,7 +64,7 @@ namespace Airport_Logic.Logic_Models
             else
             {
                 WaitingLine.Enqueue(plane);
-                ChangeInState?.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
+                ChangeInState?.Invoke(this, new StationChangedEventArgs(this.WaitingLine, plane, DateTime.Now, PlaneAction.EnterWaitingLine));
             }
         }
 
@@ -73,16 +74,17 @@ namespace Airport_Logic.Logic_Models
             {
                 isStationOccupied = true;
                 base.CurrentPlane = plane;
-                ChangeInState?.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
+                ChangeInState?.Invoke(this, new StationChangedEventArgs(this.WaitingLine, plane, DateTime.Now, PlaneAction.EnterStation));
                 Thread.Sleep(base.WaitingTime);
                 base.CurrentPlane = null;
             }
 
             isStationOccupied = false;
-            ChangeInState?.Invoke(this, new LogicStationChangedEventArgs(this.WaitingLine, this.CurrentPlane, DateTime.Now));
+            ChangeInState?.Invoke(this, new StationChangedEventArgs(this.WaitingLine, plane, DateTime.Now, PlaneAction.LeaveStation));
 
             MoveToNextStation(plane);
         }
+
 
         private void MoveToNextStation(Plane plane)
         {
@@ -158,22 +160,7 @@ namespace Airport_Logic.Logic_Models
         {
             return (LogicStation)base.ConnectedStations.First(s => s.StationNumber == stationNumber);
         }
-
-        public class LogicStationChangedEventArgs : EventArgs
-        {
-            public Queue<Plane> WaitingLine { get; }
-            public Plane CurrentPlane { get; }
-            public DateTime ChangeTime { get; }
-
-            public LogicStationChangedEventArgs(IEnumerable<Plane> waitingLine, Plane currentPlane, DateTime changeTime)
-            {
-                this.WaitingLine = new Queue<Plane>(waitingLine);
-                CurrentPlane = currentPlane;
-                ChangeTime = changeTime;
-            }
-        }
-
-        public delegate void LogicStationEvent(object sender, LogicStationChangedEventArgs args);
+        
     }
 
 }

@@ -7,43 +7,43 @@ using System.Threading.Tasks;
 
 namespace Airport_Server.Services
 {
-    public class AirportManager
+    public class AirportManager : IAirportManager
     {
-        private readonly List<Airport>  airports;
+        private readonly List<IAirport> airports;
 
         public AirportManager()
         {
-            this.airports = new List<Airport>();
+            this.airports = new List<IAirport>();
         }
 
-        public void AddAirport(Airport airport)
+        public void AddAirport(IAirport airport)
         {
             this.airports.Add(airport);
         }
 
-        public Airport GetAirport(int id)
+        public IAirport GetAirport(int id)
         {
             return this.airports.FirstOrDefault(a => a.Id == id);
         }
 
-        public Airport GetAirport(string name)
+        public IAirport GetAirport(string name)
         {
             return this.airports.FirstOrDefault(a => a.Name == name);
         }
 
-        public IEnumerable<Airport> GetAirports()
+        public IEnumerable<IAirport> GetAirports()
         {
             return airports;
         }
 
-        public void AddAirports(IEnumerable<Airport> airports)
+        public void AddAirports(IEnumerable<IAirport> airports)
         {
             foreach (var airport in airports)
             {
                 AddAirport(airport);
             }
         }
-        
+
     }
 
 

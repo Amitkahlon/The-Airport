@@ -16,6 +16,8 @@ namespace WpfNetCoreMvvm.Services
         private readonly IOptions<AppSettings> settings;
 
         public event EventHandler<IEnumerable<AirportStatus>> ReceiveAirports;
+        public event EventHandler<IEnumerable<CommonPlaneLog>> ReceiveLogs;
+
         public event EventHandler<string> ErrorOccured;
 
         public ConnectionService(IOptions<AppSettings> settings)
@@ -64,6 +66,18 @@ namespace WpfNetCoreMvvm.Services
                     });
 
                 ReceiveAirports?.Invoke(this, airports);
+            });
+
+            connection.On<string>("ReceiveLogs", (jsonLogs) =>
+            {
+                IEnumerable<CommonPlaneLog> logs = JsonConvert.DeserializeObject<IEnumerable<CommonPlaneLog>>(jsonLogs,
+                    new JsonSerializerSettings()
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
+                        PreserveReferencesHandling = PreserveReferencesHandling.Objects
+                    });
+
+                ReceiveLogs?.Invoke(this, logs);
             });
         }
     }

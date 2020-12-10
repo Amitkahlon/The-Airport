@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Airport_DAL.Services
 {
-    public class AirportDataService
+    public class AirportDataService : IAirportDataService
     {
         private readonly object key = new object();
         public DataContext Context { get; set; }
@@ -90,6 +90,16 @@ namespace Airport_DAL.Services
         public async Task<DbStation> GetStationAsync(int id)
         {
             return await this.Context.Stations.SingleOrDefaultAsync(s => s.Id == id);
+        }
+
+        public IEnumerable<PlaneLog> GetLogs()
+        {
+            using (var context = new DataContext())
+            {
+                return context.PlanesLog
+                    .Include(log => log.Station)
+                    .Include(log => log.Plane).ThenInclude(plane => plane.Route).ToList();
+            }
         }
     }
 }

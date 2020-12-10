@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Airport_Server.Converter
 {
-    public class ConverterProvider
+    public class ConverterProvider : IConverterProvider
     {
         private LogicDatabaseConverter logicDatabase;
         public LogicDatabaseConverter LogicDatabase
         {
             get
             {
-                if(logicDatabase == null)
+                if (logicDatabase == null)
                 {
                     this.logicDatabase = new LogicDatabaseConverter(CommonToDb, LogicCommon);
                 }

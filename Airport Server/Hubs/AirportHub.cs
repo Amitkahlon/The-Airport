@@ -23,8 +23,13 @@ namespace Airport_Server.Hubs
 
         public override Task OnConnectedAsync()
         {
-            this.updateClientService.ChangeInStateEventHandler(null, null);
+            this.updateClientService.SendAirports(null, null);
             return base.OnConnectedAsync();
+        }
+
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            return base.OnDisconnectedAsync(exception);
         }
     }
 }

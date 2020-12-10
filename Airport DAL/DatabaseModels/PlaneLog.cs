@@ -1,8 +1,6 @@
-﻿using Airport_Common.Models;
+﻿using Airport_Common.Args;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace Airport_DAL.DatabaseModels
 {
@@ -10,8 +8,9 @@ namespace Airport_DAL.DatabaseModels
     {
         [Key]
         public int Id{ get; set; }
-        public DbPlane PlaneId { get; set; }
-        public DbStation StationId { get; set; }
+        public DbPlane Plane { get; set; }
+        public DbStation Station { get; set; }
         public DateTime Time { get; set; }
+        public PlaneAction PlaneAction{ get; set; }
     }
 }

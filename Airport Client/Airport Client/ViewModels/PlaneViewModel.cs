@@ -12,9 +12,11 @@ namespace AirportClient.ViewModels
     public class PlaneViewModel : ViewModelBase
     {
         private readonly NavigationService navigationService;
+        private Plane plane;
 
-        public Plane Plane { get; set; }
-        public Station Station { get; set; }
+        public Plane Plane { get => plane; set => Set(ref plane, value); }
+        private Station station;
+        public Station Station { get => station; set => Set(ref station, value); }
         public AirportStatus Airport { get; set; }
         public RelayCommand GoBackCommand { get; set; }
 

@@ -95,8 +95,7 @@ namespace Airport_Logic.Services
             //first restore the waiting lines, this will not trigger activity in the station yet.
             for (int i = 0; i < this.stations.Count; i++)
             {
-                //todo: change to waiting line != empty
-                if (listCommonStations[i].WaitingLine != null)
+                if (listCommonStations[i].WaitingLine != null && !listCommonStations[i].WaitingLine.Any())
                 {
                     this.stations[i].WaitingLine = listCommonStations[i].WaitingLine;
                 }

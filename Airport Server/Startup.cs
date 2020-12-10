@@ -3,6 +3,7 @@ using Airport_DAL.Services;
 using Airport_Server.Converter;
 using Airport_Server.Hubs;
 using Airport_Server.Services;
+using Airport_Server.Services.DALServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +14,7 @@ namespace Airport_Server
 {
     public class Startup
     {
-        private UpdateClientService updateClientService;
+        private IUpdateClientService UpdateClientService;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -24,25 +25,23 @@ namespace Airport_Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //todo: add interfaces.
-            //todo: fix given id in plane maker
-
             services.AddControllers();
 
-            services.AddSingleton(x =>
+            services.AddSingleton<IServerService, ServerService>(serviceProvider =>
             {
-                return new LogicService
+                return new ServerService
                 (
-                    x.GetRequiredService<AirportDataService>(),
-                    x.GetRequiredService<ConverterProvider>(),
-                    createAirports: false
+                    serviceProvider.GetRequiredService<IConverterProvider>(),
+                    serviceProvider.GetRequiredService<IDALService>(),
+                    AirportLoader.Load
                 );
             });
 
-
-            services.AddSingleton<AirportDataService>();
-            services.AddSingleton<ConverterProvider>();
+            services.AddSingleton<IAirportDataService, AirportDataService>();
+            services.AddSingleton<IConverterProvider, ConverterProvider>();
             services.AddSingleton<UpdateClientService>();
+            services.AddSingleton<ILogService, LogService>();
+            services.AddSingleton<IDALService, DALService>();
 
             services.AddSignalR();
         }
@@ -50,7 +49,7 @@ namespace Airport_Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            this.updateClientService = app.ApplicationServices.GetService<UpdateClientService>();
+            this.UpdateClientService = app.ApplicationServices.GetService<IUpdateClientService>();
 
             if (env.IsDevelopment())
             {

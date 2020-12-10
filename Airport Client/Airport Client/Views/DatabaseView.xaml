@@ -8,8 +8,6 @@
              DataContext="{Binding Source={StaticResource Locator}, Path=DatabaseViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock>
-            Database View!
-        </TextBlock>
+        <DataGrid ItemsSource="{Binding Logs}"/>
     </Grid>
 </UserControl>

@@ -5,5 +5,15 @@
     <RootNamespace>Airport_Server</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Airport DAL\Airport DAL.csproj" />
+    <ProjectReference Include="..\Airport Logic\Airport Logic.csproj" />
+    <ProjectReference Include="..\Plane Maker\Plane Maker.csproj" />
+  </ItemGroup>
+
 
 </Project>

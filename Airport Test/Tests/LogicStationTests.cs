@@ -13,7 +13,7 @@ namespace Airport_Test
     [TestClass]
     public class LogicStationTests
     {
-        private TestStationService testStationService;
+        private readonly TestStationService testStationService;
         public LogicStationTests()
         {
             testStationService = TestStationService.GetInstance();
@@ -60,11 +60,14 @@ namespace Airport_Test
         public void EnterStation_1Plane()
         {
             //Arrange
-            var station1 = new LogicStation();
-            station1.WaitingTime = TimeSpan.FromSeconds(2);
+            var station1 = new LogicStation
+            {
+                WaitingTime = TimeSpan.FromSeconds(2)
+            };
+
             var plane = new Plane()
             {
-                PlaneRoute = new StationTest1()
+                Route = new MockRoute()
             };
 
             //Act
@@ -91,13 +94,13 @@ namespace Airport_Test
 
             var plane1 = new Plane()
             {
-                PlaneRoute = new StationTest1(),
+                Route = new MockRoute(),
                 FlightNumber = "0"
             };
 
             var plane2 = new Plane()
             {
-                PlaneRoute = new StationTest1(),
+                Route = new MockRoute(),
                 FlightNumber = "1"
             };
 
@@ -123,11 +126,11 @@ namespace Airport_Test
             Assert.IsFalse(testStationService.HasCurrentPlane(s1));
         }
 
-        public class StationTest1 : IRoute
+        public class MockRoute : Route
         {
-            public string Name => "Test1";
+            public new string Name => "Test1";
 
-            public IEnumerable<int> GetNextAvailableRoute(int stationNumber)
+            public new IEnumerable<int> GetNextAvailableRoute(int stationNumber)
             {
                 switch (stationNumber)
                 {

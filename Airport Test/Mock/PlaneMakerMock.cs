@@ -44,14 +44,14 @@ namespace Airport_Test.Mock
                 Color = Color.White,
                 Country = "israel",
                 PassangersCount = 100,
-                PlaneRoute = new LandingRoute(),
+                Route = new LandingRoute(),
                 FlightNumber = id.ToString()
             });
 
             id++;
         }
 
-        public void PushPlane(IRoute route)
+        public void PushPlane(Route route)
         {
             pushPlane.PushPlane(new Plane()
             {
@@ -59,7 +59,7 @@ namespace Airport_Test.Mock
                 Color = Color.White,
                 Country = "israel",
                 PassangersCount = 100,
-                PlaneRoute = route,
+                Route = route,
                 FlightNumber = id.ToString()
             });
             id++;

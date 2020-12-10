@@ -7,6 +7,6 @@ namespace Airport_Common.Models
     /// </summary>
     public interface IRouteable
     {
-        IRoute PlaneRoute { get; }
+        Route Route { get; }
     }
 }

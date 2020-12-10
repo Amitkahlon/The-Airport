@@ -1,4 +1,6 @@
-﻿using Airport_Common.Models;
+﻿using Airport_Common.Args;
+using Airport_Common.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -10,15 +12,15 @@ namespace Airport_Logic.Logic_Models
 {
     public class LogicStation : Station, IEnterStation, IWaitingLine
     {
-        private event Action ChangeInStateEvent;
-        public ConcurrentQueue<Plane> WaitingLine { get; private set; }
+
+        internal event StationEvent ChangeInState;
         private bool isStationOccupied;
         private readonly object waitingLineLock = new object();
 
         public LogicStation()
         {
             WaitingLine = new ConcurrentQueue<Plane>();
-            ChangeInStateEvent += PushToWait;
+            ChangeInState += PushToWait;
         }
 
         private bool IsWaitinglineEmpty
@@ -29,7 +31,7 @@ namespace Airport_Logic.Logic_Models
             }
         }
 
-        private void PushToWait()
+        private void PushToWait(object sender, StationChangedEventArgs args)
         {
             Task.Run(() =>
             {
@@ -42,6 +44,14 @@ namespace Airport_Logic.Logic_Models
             });
         }
 
+        public void EnterStationRestore(Plane plane)
+        {
+            Task.Run(() =>
+            {
+                Wait(plane);
+            });
+        }
+
         public void EnterStation(Plane plane)
         {
             if (IsWaitinglineEmpty && !isStationOccupied)
@@ -50,27 +60,34 @@ namespace Airport_Logic.Logic_Models
                 {
                     Wait(plane);
                 });
-                ChangeInStateEvent?.Invoke();
             }
             else
             {
                 WaitingLine.Enqueue(plane);
-                ChangeInStateEvent?.Invoke();
+                ChangeInState?.Invoke(this, new StationChangedEventArgs(this.WaitingLine, plane, DateTime.Now, PlaneAction.EnterWaitingLine));
             }
         }
 
         private void Wait(Plane plane)
         {
-            isStationOccupied = true;
-            lock (waitingLineLock) 
+            lock (waitingLineLock)
             {
+                isStationOccupied = true;
                 base.CurrentPlane = plane;
+                ChangeInState?.Invoke(this, new StationChangedEventArgs(this.WaitingLine, plane, DateTime.Now, PlaneAction.EnterStation));
                 Thread.Sleep(base.WaitingTime);
                 base.CurrentPlane = null;
             }
-            isStationOccupied = false;
-            ChangeInStateEvent?.Invoke();
 
+            isStationOccupied = false;
+            ChangeInState?.Invoke(this, new StationChangedEventArgs(this.WaitingLine, plane, DateTime.Now, PlaneAction.LeaveStation));
+
+            MoveToNextStation(plane);
+        }
+
+
+        private void MoveToNextStation(Plane plane)
+        {
             LogicStation nextStation = GetBestStation(plane);
             if (nextStation != null)
             {
@@ -85,11 +102,11 @@ namespace Airport_Logic.Logic_Models
         /// <returns>least busy station for the plane</returns>
         private LogicStation GetBestStation(IRouteable plane)
         {
-            var nextStationNumbers = plane.PlaneRoute.GetNextAvailableRoute(this.StationNumber);
+            var nextStationNumbers = plane.Route.GetNextAvailableRoute(this.StationNumber);
 
             if (!nextStationNumbers.Any())
             {
-                throw new Exception("Could not be empty, if we reach the end we receive -1");
+                throw new Exception("Could not be empty, if we reach the end we receive 0");
             }
             else if (nextStationNumbers.Any(staionNum => staionNum == 0)) //if it reached the end
             {
@@ -143,6 +160,7 @@ namespace Airport_Logic.Logic_Models
         {
             return (LogicStation)base.ConnectedStations.First(s => s.StationNumber == stationNumber);
         }
+        
     }
 
 }

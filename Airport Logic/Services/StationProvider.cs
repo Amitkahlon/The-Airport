@@ -5,14 +5,22 @@ using System.Text;
 using System.Linq;
 using Airport_Common.Models;
 using Airport_Logic.Interfaces;
+using static Airport_Logic.Logic_Models.LogicStation;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Airport_Logic.Services
 {
     internal class StationProvider : IStationProvider
     {
-        private readonly List<LogicStation> stations = new List<LogicStation>();
+        private List<LogicStation> stations = new List<LogicStation>();
+        private readonly IRaiseChangeInStateEvent changeInStateEvent;
         private int stationCount = 0;
 
+        public StationProvider(IRaiseChangeInStateEvent changeInStateEvent)
+        {
+            this.changeInStateEvent = changeInStateEvent;
+        }
         public void CreateStation(string stationName, TimeSpan timeSpan)
         {
             stationCount++;
@@ -26,12 +34,46 @@ namespace Airport_Logic.Services
                 throw new ArgumentException("Station number must be unique");
             }
 
-            stations.Add(new LogicStation()
+            LogicStation station = new LogicStation()
             {
-                    StationNumber = stationCount,
-                    StationName = stationName,
-                    WaitingTime = timeSpan,
-            });
+                StationNumber = stationCount,
+                StationName = stationName,
+                WaitingTime = timeSpan,
+            };
+
+            AddStation(station);
+        }
+
+        private void AddStation(LogicStation station)
+        {
+            station.ChangeInState += this.changeInStateEvent.RaiseChangeInStateEvent;
+
+            this.stations.Add(station);
+        }
+        public void RestoreStations(List<Station> stations)
+        {
+            foreach (var station in stations)
+            {
+                AddStation(RestoreStation(station));
+            }
+        }
+
+        /// <summary>
+        /// Returns a station without planes(waiting line and current plane)
+        /// </summary>
+        /// <param name="station"></param>
+        /// <returns></returns>
+        private LogicStation RestoreStation(Station station)
+        {
+            LogicStation logicStation = new LogicStation()
+            {
+                Id = station.Id,
+                StationName = station.StationName,
+                StationNumber = station.StationNumber,
+                WaitingTime = station.WaitingTime,
+            };
+
+            return logicStation;
         }
         public LogicStation GetStation(int stationNum)
         {
@@ -39,13 +81,35 @@ namespace Airport_Logic.Services
             {
                 throw new ArgumentException("station Number cannot be 0");
             }
-            try
+            return stations.First(s => s.StationNumber == stationNum);
+        }
+
+        public IEnumerable<LogicStation> GetStations()
+        {
+            return stations;
+        }
+
+        public void RestorePlanes(IEnumerable<Station> commonStations)
+        {
+            List<Station> listCommonStations = commonStations.ToList();
+            //first restore the waiting lines, this will not trigger activity in the station yet.
+            for (int i = 0; i < this.stations.Count; i++)
             {
-                return stations.First(s => s.StationNumber == stationNum);
+                if (listCommonStations[i].WaitingLine != null && !listCommonStations[i].WaitingLine.Any())
+                {
+                    this.stations[i].WaitingLine = listCommonStations[i].WaitingLine;
+                }
             }
-            catch (Exception)
+
+            //now restore the current planes, this will trigget activity in the station.
+            for (int i = 0; i < this.stations.Count; i++)
             {
-                throw new ArgumentException("Station does not exist");
+                Plane currentPlane = listCommonStations[i].CurrentPlane;
+
+                if (currentPlane != null)
+                {
+                    this.stations[i].EnterStationRestore(currentPlane);
+                }
             }
         }
     }

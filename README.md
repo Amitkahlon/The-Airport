@@ -55,6 +55,12 @@ Make sure you run the program from both the client(Wpf) and Server(asp.net core)
 Check the `Startup.cs`, if you have your database ready with airports already use PlaneMaker.Load.
 
 If you don't have airports and want to load an airport example, use `PlaneMaker.CreadAndLoad` But **MAKE SURE** next time you run the program on `PlaneMaker.Load` Mode!
+
+## Demo
+
+[Insert gif or link to demo](https://user-images.githubusercontent.com/50583120/187707555-e6ea796d-fc6d-4637-93af-cadf678fdc4b.mp4)
+
+
 ## Authors
 
 - [@Amit Kahlon](https://www.github.com/amitkahlon)
